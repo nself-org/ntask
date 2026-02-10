@@ -1,0 +1,10 @@
+# robots.txt for ɳApp
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap location
+Sitemap: https://yourapp.com/sitemap.xml

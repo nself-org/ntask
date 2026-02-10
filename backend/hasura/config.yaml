@@ -1,0 +1,24 @@
+# Hasura CLI Configuration
+#
+# This file is used by the Hasura CLI to connect to your Hasura instance.
+#
+# Install the CLI:
+#   curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+#
+# Usage:
+#   cd backend/hasura
+#   hasura console --admin-secret nself-admin-secret
+#   hasura migrate apply --database-name default
+#   hasura metadata apply
+#
+# Docs: https://hasura.io/docs/latest/hasura-cli/overview/
+
+version: 3
+
+endpoint: http://localhost:8080
+admin_secret: nself-admin-secret
+
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000/api

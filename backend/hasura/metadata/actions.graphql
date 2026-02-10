@@ -1,0 +1,18 @@
+# Hasura Actions - Custom GraphQL Operations
+#
+# Define custom queries and mutations here that are handled by your
+# Next.js API routes or serverless functions.
+#
+# Example:
+#
+# type Mutation {
+#   sendWelcomeEmail(userId: uuid!): SendEmailResponse
+# }
+#
+# type SendEmailResponse {
+#   success: Boolean!
+#   message: String
+# }
+#
+# After defining actions here, configure them in actions.yaml,
+# then apply with: hasura metadata apply

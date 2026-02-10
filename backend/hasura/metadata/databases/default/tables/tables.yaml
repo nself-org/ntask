@@ -1,0 +1,172 @@
+# Hasura Table Tracking Configuration
+#
+# This file tells Hasura which PostgreSQL tables to track and expose
+# via the GraphQL API. It also defines permissions per role.
+#
+# After modifying, apply with:
+#   hasura metadata apply
+#
+# Or use the Hasura Console UI to manage permissions visually.
+#
+# Roles:
+#   - user: Authenticated users (JWT role from hasura-auth)
+#   - public: Unauthenticated access (HASURA_GRAPHQL_UNAUTHORIZED_ROLE)
+#   - me: Self-referential (user can only access their own data)
+
+# ---------------------------------------------------------------------------
+# app_profiles table
+# ---------------------------------------------------------------------------
+- table:
+    schema: public
+    name: app_profiles
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - email
+          - display_name
+          - bio
+          - avatar_url
+          - created_at
+          - updated_at
+        filter:
+          id:
+            _eq: X-Hasura-User-Id
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - display_name
+          - bio
+          - avatar_url
+        filter:
+          id:
+            _eq: X-Hasura-User-Id
+        check: null
+  delete_permissions:
+    - role: user
+      permission:
+        filter:
+          id:
+            _eq: X-Hasura-User-Id
+
+# ---------------------------------------------------------------------------
+# app_todos table
+# ---------------------------------------------------------------------------
+- table:
+    schema: public
+    name: app_todos
+  insert_permissions:
+    - role: user
+      permission:
+        columns:
+          - title
+          - description
+          - completed
+          - is_public
+        check:
+          user_id:
+            _eq: X-Hasura-User-Id
+        set:
+          user_id: x-hasura-User-Id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - user_id
+          - title
+          - description
+          - completed
+          - is_public
+          - created_at
+          - updated_at
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+    - role: public
+      permission:
+        columns:
+          - id
+          - user_id
+          - title
+          - description
+          - completed
+          - is_public
+          - created_at
+          - updated_at
+        filter:
+          is_public:
+            _eq: true
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - title
+          - description
+          - completed
+          - is_public
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+        check: null
+  delete_permissions:
+    - role: user
+      permission:
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+
+# ---------------------------------------------------------------------------
+# app_todo_shares table
+# ---------------------------------------------------------------------------
+- table:
+    schema: public
+    name: app_todo_shares
+  object_relationships:
+    - name: todo
+      using:
+        foreign_key_constraint_on: todo_id
+  insert_permissions:
+    - role: user
+      permission:
+        columns:
+          - todo_id
+          - shared_with_email
+          - permission
+        check:
+          todo:
+            user_id:
+              _eq: X-Hasura-User-Id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - todo_id
+          - shared_with_email
+          - permission
+          - created_at
+          - updated_at
+        filter:
+          todo:
+            user_id:
+              _eq: X-Hasura-User-Id
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - permission
+        filter:
+          todo:
+            user_id:
+              _eq: X-Hasura-User-Id
+        check: null
+  delete_permissions:
+    - role: user
+      permission:
+        filter:
+          todo:
+            user_id:
+              _eq: X-Hasura-User-Id

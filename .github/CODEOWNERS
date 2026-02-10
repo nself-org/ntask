@@ -1,0 +1,28 @@
+# Code Owners for ɳApp
+# These owners will be requested for review when PRs modify matching paths
+
+# Default owners for everything
+* @acamarata
+
+# Documentation
+*.md @acamarata
+/docs/ @acamarata
+
+# CI/CD and workflows
+/.github/ @acamarata
+
+# Configuration files
+*.json @acamarata
+*.yml @acamarata
+*.yaml @acamarata
+*.toml @acamarata
+
+# Backend and database
+/lib/backend/ @acamarata
+/supabase/ @acamarata
+/scripts/ @acamarata
+
+# Security-sensitive files
+/middleware.ts @acamarata
+/.env.* @acamarata
+/lib/auth*.ts @acamarata

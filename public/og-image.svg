@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0f0f17"/>
+  <rect x="520" y="200" width="160" height="160" rx="32" fill="#1a1a2e"/>
+  <path d="M560 310V250h15l20 35 20-35h15v60h-15v-35l-20 35-20-35v35h-15z" fill="#fff"/>
+  <text x="600" y="440" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#fff">nApp</text>
+  <text x="600" y="490" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#94a3b8">Your application tagline</text>
+</svg>

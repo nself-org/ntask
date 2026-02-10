@@ -1,0 +1,39 @@
+# Gitleaks configuration for secret detection
+# See: https://github.com/gitleaks/gitleaks
+
+title = "nApp Gitleaks Configuration"
+
+# Allowlist for test/demo credentials that are safe to commit
+[allowlist]
+description = "Allow demo/test credentials in specific files"
+paths = [
+  '''scripts/seed\.ts''',
+  '''lib/faux-signin\.ts''',
+  '''components/__tests__/.*\.test\.tsx?''',
+  '''DEV_TOOLS\.md''',
+]
+
+# Allow specific patterns that look like secrets but aren't
+regexes = [
+  '''password\s*[=:]\s*['"]password123['"]''',  # Demo password in docs
+  '''Owner123!|Admin123!|Support123!|User123!''',  # Seed data passwords
+]
+
+# Custom rules to catch common secret patterns
+[[rules]]
+id = "hasura-admin-secret"
+description = "Hasura Admin Secret"
+regex = '''(?i)(hasura[-_]?admin[-_]?secret)\s*[=:]\s*['"]?([a-zA-Z0-9_-]{8,})['"]?'''
+tags = ["hasura", "admin-secret"]
+
+[[rules]]
+id = "env-secret-as-public"
+description = "Secret exposed as NEXT_PUBLIC_ variable"
+regex = '''NEXT_PUBLIC_.*(?:SECRET|PASSWORD|KEY|TOKEN).*[=:].*['"]?([a-zA-Z0-9_-]{8,})['"]?'''
+tags = ["nextjs", "public-secret"]
+
+[[rules]]
+id = "supabase-service-role"
+description = "Supabase Service Role Key (should never be exposed)"
+regex = '''supabase[-_]?service[-_]?role[-_]?key\s*[=:]\s*['"]?([a-zA-Z0-9_-]{30,})['"]?'''
+tags = ["supabase", "service-role"]

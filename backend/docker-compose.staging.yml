@@ -1,0 +1,89 @@
+###############################################################################
+# nSelf Backend Stack - Staging Override
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+#
+# This override:
+#   - Disables Hasura console
+#   - Disables dev mode
+#   - Removes Mailhog
+#   - Adds Traefik reverse proxy with automatic HTTPS
+#
+# Prerequisites:
+#   - A VPS with Docker installed
+#   - DNS records pointing to the VPS:
+#       staging.yourdomain.com     -> VPS IP
+#       api.staging.yourdomain.com -> VPS IP (or use wildcard)
+#   - Ports 80 and 443 open on the VPS
+###############################################################################
+
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@yourdomain.com}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+
+  graphql-engine:
+    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_DEV_MODE: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup,http-log,webhook-log
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hasura.rule=Host(`api.staging.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.hasura.entrypoints=websecure
+      - traefik.http.routers.hasura.tls.certresolver=letsencrypt
+      - traefik.http.services.hasura.loadbalancer.server.port=8080
+    ports: []
+
+  auth:
+    environment:
+      AUTH_SERVER_URL: https://auth.staging.${DOMAIN:-yourdomain.com}
+      AUTH_CLIENT_URL: https://staging.${DOMAIN:-yourdomain.com}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.auth.rule=Host(`auth.staging.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.auth.entrypoints=websecure
+      - traefik.http.routers.auth.tls.certresolver=letsencrypt
+      - traefik.http.services.auth.loadbalancer.server.port=4000
+    ports: []
+
+  storage:
+    environment:
+      PUBLIC_URL: https://storage.staging.${DOMAIN:-yourdomain.com}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.storage.rule=Host(`storage.staging.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.storage.entrypoints=websecure
+      - traefik.http.routers.storage.tls.certresolver=letsencrypt
+      - traefik.http.services.storage.loadbalancer.server.port=8484
+    ports: []
+
+  postgres:
+    ports: []
+
+  minio:
+    ports: []
+
+volumes:
+  traefik_certs:
+    driver: local

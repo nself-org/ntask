@@ -1,0 +1,23 @@
+# Hasura Actions Configuration
+#
+# Map custom GraphQL operations to HTTP handlers.
+#
+# Example:
+#
+# actions:
+#   - name: sendWelcomeEmail
+#     definition:
+#       kind: synchronous
+#       handler: '{{ACTION_HANDLER_URL}}/api/actions/send-welcome-email'
+#     permissions:
+#       - role: user
+#
+# Docs: https://hasura.io/docs/latest/actions/overview/
+
+actions: []
+
+custom_types:
+  enums: []
+  input_objects: []
+  objects: []
+  scalars: []

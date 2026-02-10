@@ -1,0 +1,154 @@
+###############################################################################
+# nSelf Backend Stack - Production Override
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.production.yml up -d
+#
+# This override:
+#   - Disables Hasura console and dev mode
+#   - Adds Traefik with Let's Encrypt HTTPS
+#   - Adds PostgreSQL backup service (daily)
+#   - Enables restart policies
+#   - Adds resource limits
+#   - Removes Mailhog (requires real SMTP)
+#
+# Prerequisites:
+#   - Production VPS with Docker
+#   - DNS A records:
+#       api.yourdomain.com     -> VPS IP
+#       auth.yourdomain.com    -> VPS IP
+#       storage.yourdomain.com -> VPS IP
+#   - Real SMTP credentials in .env
+#   - Strong passwords/secrets in .env
+###############################################################################
+
+version: "3.9"
+
+services:
+  traefik:
+    image: traefik:v3.0
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL:-admin@yourdomain.com}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --log.level=WARN
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 256M
+
+  graphql-engine:
+    restart: always
+    environment:
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_DEV_MODE: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup,http-log,webhook-log
+      HASURA_GRAPHQL_LOG_LEVEL: warn
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.hasura.rule=Host(`api.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.hasura.entrypoints=websecure
+      - traefik.http.routers.hasura.tls.certresolver=letsencrypt
+      - traefik.http.services.hasura.loadbalancer.server.port=8080
+    ports: []
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1G
+
+  auth:
+    restart: always
+    environment:
+      AUTH_SERVER_URL: https://auth.${DOMAIN:-yourdomain.com}
+      AUTH_CLIENT_URL: https://${DOMAIN:-yourdomain.com}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.auth.rule=Host(`auth.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.auth.entrypoints=websecure
+      - traefik.http.routers.auth.tls.certresolver=letsencrypt
+      - traefik.http.services.auth.loadbalancer.server.port=4000
+    ports: []
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+
+  storage:
+    restart: always
+    environment:
+      PUBLIC_URL: https://storage.${DOMAIN:-yourdomain.com}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.storage.rule=Host(`storage.${DOMAIN:-yourdomain.com}`)
+      - traefik.http.routers.storage.entrypoints=websecure
+      - traefik.http.routers.storage.tls.certresolver=letsencrypt
+      - traefik.http.services.storage.loadbalancer.server.port=8484
+    ports: []
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+
+  postgres:
+    restart: always
+    ports: []
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 2G
+
+  minio:
+    restart: always
+    ports: []
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # Automated PostgreSQL Backups (Daily)
+  # ---------------------------------------------------------------------------
+  pg-backup:
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-nself}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 6
+      HEALTHCHECK_PORT: 8080
+    volumes:
+      - pg_backups:/backups
+
+volumes:
+  traefik_certs:
+    driver: local
+  pg_backups:
+    driver: local

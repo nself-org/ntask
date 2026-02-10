@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "ms-playwright.playwright",
+    "vitest.explorer",
+    "lokalise.i18n-ally",
+    "christian-kohler.path-intellisense",
+    "prisma.prisma",
+    "GraphQL.vscode-graphql",
+    "GraphQL.vscode-graphql-syntax",
+    "tauri-apps.tauri-vscode"
+  ],
+  "unwantedRecommendations": []
+}

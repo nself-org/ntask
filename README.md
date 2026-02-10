@@ -45,23 +45,23 @@ Clone it. Configure it. Build your app on top of it.
 ## Architecture Overview
 
 ```
-+-----------------------------------------------------------------+
-|                         YOUR APP                                |
-+-----------------------------------------------------------------+
-|                                                                 |
-|  /backend                        /  (frontend)                  |
-|  ┌─────────────────────┐        ┌────────────────────────────┐  |
++------------------------------------------------------------------+
+|                         YOUR APP                                 |
++------------------------------------------------------------------+
+|                                                                  |
+|  /backend                        /  (frontend)                   |
+|  ┌──────────────────────┐        ┌────────────────────────────┐  |
 |  │ PostgreSQL 16        │        │ Next.js 13 (App Router)    │  |
 |  │ Hasura GraphQL Engine│ <----> │ Backend Abstraction Layer  │  |
 |  │ Hasura Auth (JWT)    │        │ React 18 + TypeScript      │  |
 |  │ Hasura Storage (S3)  │        │ Tailwind CSS + shadcn/ui   │  |
 |  │ MinIO (Object Store) │        │ Offline-first (IndexedDB)  │  |
 |  │ Traefik (HTTPS)      │        │ PWA + Desktop (Tauri)      │  |
-|  └─────────────────────┘        └────────────────────────────┘  |
-|                                                                 |
-|  Runs on: VPS, bare metal,      Deploys to: Vercel, Netlify,   |
-|  Docker, localhost               self-hosted, Tauri, PWA        |
-+-----------------------------------------------------------------+
+|  └──────────────────────┘        └────────────────────────────┘  |
+|                                                                  |
+|  Runs on: VPS, bare metal,      Deploys to: Vercel, Netlify,     |
+|  Docker, localhost               self-hosted, Tauri, PWA         |
++------------------------------------------------------------------+
 ```
 
 The key insight: **your frontend code never imports backend SDKs directly.** Everything goes through a unified abstraction layer with hooks like `useAuth`, `useQuery`, `useMutation`, `useStorage`, and `useRealtime`. Change your backend provider with a single environment variable.
@@ -174,9 +174,9 @@ nself-app/
 │   │   └── offline-provider.tsx      # Offline detection + queue
 │   ├── services/                     # Business logic wrappers
 │   │   ├── todos.ts                  # Todo CRUD operations
-│   │   └── profile.ts               # Profile + avatar operations
+│   │   └── profile.ts                # Profile + avatar operations
 │   ├── types/                        # TypeScript interfaces
-│   │   └── backend.ts               # AuthAdapter, DatabaseAdapter, etc.
+│   │   └── backend.ts                # AuthAdapter, DatabaseAdapter, etc.
 │   ├── offline/                      # Offline-first utilities
 │   └── platform/                     # Platform detection, native APIs
 │
@@ -599,8 +599,8 @@ make prod-up     # Starts with HTTPS, backups, resource limits
 ### Full Stack Deployment Map
 
 ```
-                    ┌─────────────────────────────────────────────┐
-                    │               PRODUCTION                     │
+                    ┌───────────────────────────────────────────────┐
+                    │               PRODUCTION                      │
                     │                                               │
                     │  Frontend (Vercel/Netlify/CDN)                │
                     │  └── NEXT_PUBLIC_BACKEND_PROVIDER=nself       │
@@ -611,10 +611,10 @@ make prod-up     # Starts with HTTPS, backups, resource limits
                     │  └── auth.yourdomain.com    (Authentication)  │
                     │  └── storage.yourdomain.com (File Storage)    │
                     │  └── Traefik handles HTTPS automatically      │
-                    │  └── Daily PostgreSQL backups                  │
-                    └─────────────────────────────────────────────┘
+                    │  └── Daily PostgreSQL backups                 │
+                    └───────────────────────────────────────────────┘
 
-                    ┌─────────────────────────────────────────────┐
+                    ┌───────────────────────────────────────────────┐
                     │               STAGING                         │
                     │                                               │
                     │  Frontend (Vercel preview / VPS)              │
@@ -625,15 +625,15 @@ make prod-up     # Starts with HTTPS, backups, resource limits
                     │  └── api.staging.yourdomain.com               │
                     │  └── auth.staging.yourdomain.com              │
                     │  └── storage.staging.yourdomain.com           │
-                    └─────────────────────────────────────────────┘
+                    └───────────────────────────────────────────────┘
 
-                    ┌─────────────────────────────────────────────┐
+                    ┌───────────────────────────────────────────────┐
                     │               LOCAL DEV                       │
                     │                                               │
-                    │  Frontend: pnpm dev (localhost:3000)       │
+                    │  Frontend: pnpm dev (localhost:3000)          │
                     │  Backend:  make up     (localhost:8080, etc.) │
                     │  Email:    Mailhog     (localhost:8025)       │
-                    └─────────────────────────────────────────────┘
+                    └───────────────────────────────────────────────┘
 ```
 
 ---

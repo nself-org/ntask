@@ -1,0 +1,5 @@
+package org.nself.demo;
+
+import com.getcapacitor.BridgeActivity;
+
+public class MainActivity extends BridgeActivity {}

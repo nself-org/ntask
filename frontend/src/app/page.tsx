@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/providers';
 import { AppHeader } from '@/components/layout/app-header';
 import { Sparkles, ArrowRight, Shield, Zap } from 'lucide-react';
@@ -7,6 +9,14 @@ import Link from 'next/link';
 
 export default function Home() {
   const { user, loading } = useAuth();
+  const router = useRouter();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
 
   return (
     <div className="min-h-screen bg-background">

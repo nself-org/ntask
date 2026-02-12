@@ -1,66 +1,132 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# =============================================================================
+# AI AGENT DIRECTORIES (private — never commit)
+# =============================================================================
+.ai/
+.claude
+.codex
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# =============================================================================
+# ROOT-LEVEL PRIVATE FILES
+# =============================================================================
+READY.md
+PROMPT.md
 
-# testing
-/coverage
+# =============================================================================
+# PLANNING & WORKING DOCUMENTS (local only)
+# =============================================================================
+TODO.md
+DONE.md
+FEEDBACK.md
+NEXT.md
+TRACKING.md
+PLAN.md
 
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
+# =============================================================================
+# OS FILES
+# =============================================================================
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# local env files
-.env
-.env*.local
-backend/.env
-backend/.env.local
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDE
-.vscode/*
+# =============================================================================
+# IDE & EDITORS
+# =============================================================================
+.vscode/
 !.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .idea/
 *.swp
 *.swo
 *~
 
-# Testing
-/playwright-report/
-/playwright/.cache/
-/test-results/
+# =============================================================================
+# ENVIRONMENT & CREDENTIALS (never commit)
+# =============================================================================
+.env
+.env.*
+!.env.example
+!.env.*.example
+.env.local
+.env.*.local
+.secrets/
+secrets/
+*.key
+*.pem
 
-# Codex
-.codex/CLI.md
+# =============================================================================
+# PROJECT-SPECIFIC PRIVATE DIRECTORIES
+# =============================================================================
+.backend/
+.nself/
+backend/.runtime/
+backend/runtime/
 
-# OS
-.DS_Store
-Thumbs.db
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+node_modules/
+/.pnp
+.pnp.js
 
-# Claude CLI files (but keep CLAUDE.md)
+# =============================================================================
+# BUILD OUTPUT
+# =============================================================================
+dist/
+build/
+.next/
+out/
+
+# =============================================================================
+# LOGS
+# =============================================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+
+# =============================================================================
+# CACHE & TEMP
+# =============================================================================
+.cache/
+.tmp/
+tmp/
+.wiki-tmp/
+*.tmp
+*.temp
+
+# =============================================================================
+# TEST OUTPUT
+# =============================================================================
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# =============================================================================
+# TYPESCRIPT
+# =============================================================================
+*.tsbuildinfo
+next-env.d.ts
+
+# =============================================================================
+# DEPLOYMENT PLATFORMS
+# =============================================================================
+.vercel
+
+# =============================================================================
+# LANGUAGE-SPECIFIC
+# =============================================================================
+
+# Python
+__pycache__/
+*.pyc
+
+# Rust / Go
+target/
+bin/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
 .claude/
-!.claude/CLAUDE.md

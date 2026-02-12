@@ -20,7 +20,9 @@
     "**/.git": true,
     "**/.next": true,
     "**/node_modules": true,
-    "**/.DS_Store": true
+    "**/.DS_Store": true,
+    ".claude": true,
+    ".codex": true
   },
   "search.exclude": {
     "**/node_modules": true,

@@ -1,8 +1,8 @@
-# nApp
+# ɳApp
 
 **The "code once, deploy everywhere" boilerplate for modern applications.**
 
-A production-ready monorepo boilerplate with a self-hosted backend (nSelf) and a universal Next.js frontend. Build your backend with Docker + Hasura + Postgres, build your frontend with any AI agent or by hand, deploy to any platform.
+A production-ready monorepo boilerplate with a self-hosted backend (ɳSelf) and a universal Next.js frontend. Build your backend with Docker + Hasura + Postgres, build your frontend with any AI agent or by hand, deploy to any platform.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
@@ -15,8 +15,8 @@ This is a **boilerplate**, not a finished application. It provides:
 
 - A complete **backend stack** (PostgreSQL + Hasura + Auth + Storage) that runs anywhere Docker runs
 - A universal **frontend app** (Next.js + TypeScript + Tailwind) that deploys to web, desktop, and mobile
-- A **backend abstraction layer** so you can swap between nSelf, Supabase, Nhost, or Bolt without changing application code
-- Full compatibility with **AI coding agents** (Bolt.new, Lovable, AI Assistant, Cursor, Copilot, etc.)
+- A **backend abstraction layer** so you can swap between ɳSelf, Supabase, Nhost, or Bolt without changing application code
+- Full compatibility with **AI coding agents** (Bolt.new, Lovable, AI agents, Cursor, etc.)
 
 Clone it. Configure it. Build your app on top of it.
 
@@ -49,18 +49,18 @@ Clone it. Configure it. Build your app on top of it.
 |                         YOUR APP                                 |
 +------------------------------------------------------------------+
 |                                                                  |
-|  /backend                        /  (frontend)                   |
+|  /backend                        /frontend                       |
 |  ┌──────────────────────┐        ┌────────────────────────────┐  |
-|  │ PostgreSQL 16        │        │ Next.js 13 (App Router)    │  |
+|  │ PostgreSQL 16        │        │ Next.js 15 (App Router)    │  |
 |  │ Hasura GraphQL Engine│ <----> │ Backend Abstraction Layer  │  |
-|  │ Hasura Auth (JWT)    │        │ React 18 + TypeScript      │  |
+|  │ Hasura Auth (JWT)    │        │ React 19 + TypeScript      │  |
 |  │ Hasura Storage (S3)  │        │ Tailwind CSS + shadcn/ui   │  |
-|  │ MinIO (Object Store) │        │ Offline-first (IndexedDB)  │  |
-|  │ Traefik (HTTPS)      │        │ PWA + Desktop (Tauri)      │  |
+|  │ MinIO (Object Store) │        │ Multi-platform support     │  |
+|  │ Traefik (HTTPS)      │        │ PWA + Desktop + Mobile     │  |
 |  └──────────────────────┘        └────────────────────────────┘  |
 |                                                                  |
 |  Runs on: VPS, bare metal,      Deploys to: Vercel, Netlify,     |
-|  Docker, localhost               self-hosted, Tauri, PWA         |
+|  Docker, localhost               Desktop (Tauri), Mobile (Cap)   |
 +------------------------------------------------------------------+
 ```
 
@@ -72,39 +72,40 @@ The key insight: **your frontend code never imports backend SDKs directly.** Eve
 
 ### Option A: Full Stack (Recommended)
 
-Start the self-hosted backend and frontend together:
+Use the bootstrap script for one-command setup:
 
 ```bash
 # 1. Clone the repo
 git clone https://github.com/acamarata/nself-app.git
 cd nself-app
 
-# 2. Start the backend (requires Docker)
-cd backend
-cp .env.example .env           # Edit passwords/secrets for production
-make up                        # Starts PostgreSQL, Hasura, Auth, Storage, MinIO
-cd ..
+# 2. Bootstrap everything (requires Docker + pnpm)
+./backend/scripts/bootstrap.sh
 
-# 3. Start the frontend
-cp .env.local.example .env.local  # Points to local backend
-pnpm install
-pnpm dev
+# 3. Start backend services
+cd backend && docker-compose up -d
+
+# 4. Start frontend
+cd ../frontend && pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) -- your app is running.
-Open [http://localhost:8080/console](http://localhost:8080/console) -- Hasura Console for your database.
+Open [http://localhost:8080/console](http://localhost:8080/console) -- Hasura Console.
 
-### Option B: Frontend Only (Bolt.new / Supabase)
+### Option B: Frontend Only (Supabase / Nhost)
 
-If using Bolt.new or Supabase as your backend, you don't need Docker:
+If using a managed backend, skip Docker:
 
 ```bash
 git clone https://github.com/acamarata/nself-app.git
-cd nself-app
+cd nself-app/frontend
 
-cp .env.example .env
-# Set NEXT_PUBLIC_BACKEND_PROVIDER=bolt (or supabase)
-# Set your Supabase URL and anon key
+# Copy and configure environment
+cp env/.env.local.example env/.env.local
+# Edit env/.env.local:
+#   NEXT_PUBLIC_BACKEND_PROVIDER=supabase
+#   NEXT_PUBLIC_SUPABASE_URL=your-url
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key
 
 pnpm install
 pnpm dev
@@ -120,83 +121,100 @@ Open this repo in Bolt.new, Lovable, or any AI coding agent. The `.bolt/prompt`,
 
 ```
 nself-app/
+├── .ai/                              # AI agent workspace (gitignored)
+#   ├── agent-workspace/                       # AI agent files
+│   ├── agent-b/                        # Agent B files
+│   ├── shared/                       # Cross-agent context
+│   ├── planning/                     # Task handoffs
+│   └── INSTRUCTIONS.md                     # Project instructions (canonical)
 │
-├── backend/                          # BACKEND - Self-hosted nSelf stack
-│   ├── docker-compose.yml            # Local dev stack (Postgres, Hasura, Auth, Storage)
-│   ├── docker-compose.staging.yml    # Staging overlay (adds Traefik HTTPS)
-│   ├── docker-compose.production.yml # Production overlay (adds backups, limits)
+├── .ai/agent-workspace → .ai/agent-workspace              # Symlink (gitignored, hidden)
+├── .agent-b → .ai/agent-b                # Symlink (gitignored, hidden)
+├── .github/                          # GitHub Actions, templates
+├── .vscode/                          # Editor settings
+├── .wiki/                            # All public documentation
+│
+├── backend/                          # BACKEND - ɳSelf CLI + services
+│   ├── docker-compose.yml            # Local dev services
+│   ├── docker-compose.staging.yml    # Staging configuration
+│   ├── docker-compose.production.yml # Production configuration
 │   ├── .env.example                  # Backend environment template
-│   ├── Makefile                      # Quick commands (make up, make down, etc.)
-│   ├── postgres/
-│   │   └── init.sql                  # Database initialization (schemas, tables, triggers)
-│   └── hasura/
-│       ├── config.yaml               # Hasura CLI configuration
-│       ├── metadata/                 # GraphQL schema, permissions, actions
-│       └── migrations/               # Database migrations
+│   ├── Makefile                      # Quick commands (make up, make down)
+│   ├── hasura/                       # Hasura metadata + migrations
+│   ├── postgres/                     # Database initialization
+│   └── scripts/                      # Automation scripts
+│       ├── bootstrap.sh              # One-command setup
+│       ├── reset.sh                  # Environment reset
+│       └── seed.ts                   # Database seeding
 │
-├── app/                              # FRONTEND - Next.js App Router pages
-│   ├── layout.tsx                    # Root layout (providers, fonts, metadata)
-│   ├── page.tsx                      # Landing page
-│   ├── login/page.tsx                # Login page
-│   ├── register/page.tsx             # Registration page
-│   ├── dashboard/page.tsx            # Dashboard (protected)
-│   ├── todos/page.tsx                # Todos example (protected)
-│   ├── account/page.tsx              # Account settings (protected)
-│   ├── forgot-password/page.tsx      # Password reset
-│   ├── sitemap.ts                    # Auto-generated sitemap
-│   └── api/                          # API routes
-│       ├── health/route.ts           # Health check endpoint
-│       └── hello/route.ts            # Example API route
+├── frontend/                         # FRONTEND - Code once, deploy everywhere
+│   ├── README.md                     # Frontend documentation
+│   │
+│   ├── src/                          # Shared Next.js source
+│   │   ├── app/                      # Next.js App Router
+│   │   ├── components/               # React components
+│   │   │   ├── ui/                   # shadcn/ui components
+│   │   │   ├── auth/                 # Auth components
+│   │   │   ├── todos/                # Todo app components
+│   │   │   ├── profile/              # Profile components
+│   │   │   └── layout/               # Layout components
+│   │   ├── hooks/                    # Custom React hooks
+│   │   ├── lib/                      # Services, backend adapters
+│   │   │   ├── backend/              # Multi-backend adapters
+│   │   │   │   ├── nself/            # ɳSelf adapter
+│   │   │   │   ├── supabase/         # Supabase adapter
+│   │   │   │   └── nhost/            # Nhost adapter
+│   │   │   ├── providers/            # React contexts
+│   │   │   ├── services/             # Business logic
+│   │   │   └── types/                # TypeScript interfaces
+│   │   ├── styles/                   # Global styles, theme
+│   │   ├── types/                    # TypeScript types
+│   │   ├── utils/                    # Utility functions
+│   │   └── middleware.ts             # Next.js middleware
+│   │
+│   ├── platforms/                    # Platform-specific wrappers
+│   │   ├── desktop/tauri/            # Tauri (macOS, Windows, Linux)
+│   │   ├── mobile/                   # Capacitor (iOS, Android)
+│   │   └── supabase/                 # Supabase backend files
+│   │
+│   ├── variants/                     # Platform-specific UI components
+│   │   ├── tv-ui/                    # 10-foot UI for TV platforms
+│   │   ├── display-ui/               # Smart display UI
+│   │   └── shared/                   # Shared variant utilities
+│   │
+│   ├── public/                       # Static assets
+│   ├── tests/                        # Test suites
+│   ├── docs/                         # Frontend documentation
+│   │
+│   ├── config/                       # Tool configurations
+│   │   ├── components.json           # shadcn/ui config
+│   │   ├── .eslintrc.json            # ESLint
+│   │   ├── .prettierrc.json          # Prettier
+│   │   ├── playwright.config.ts      # Playwright
+│   │   ├── vitest.config.ts          # Vitest
+│   │   └── renovate.json             # Dependency updates
+│   │
+│   ├── deployment/                   # Deployment configs
+│   │   ├── Dockerfile                # Docker build
+│   │   ├── .dockerignore             # Docker ignore
+│   │   └── netlify.toml              # Netlify config
+│   │
+│   ├── env/                          # Environment templates
+│   │   ├── .env.example              # All backends
+│   │   ├── .env.local.example        # Local development
+│   │   ├── .env.production.example   # Production
+│   │   └── .env.staging.example      # Staging
+│   │
+│   ├── package.json                  # Dependencies
+│   ├── pnpm-lock.yaml                # Lock file
+│   ├── next.config.js                # Next.js config
+│   ├── tsconfig.json                 # TypeScript config
+│   ├── tailwind.config.ts            # Tailwind CSS config
+│   └── postcss.config.js             # PostCSS config
 │
-├── components/                       # FRONTEND - React components
-│   ├── auth/                         # Auth forms, protected route wrapper
-│   ├── dashboard/                    # Dashboard cards, status indicators
-│   ├── layout/                       # Header, footer, sidebar, app shell
-│   ├── todos/                        # Todo list, create form, item
-│   ├── profile/                      # Profile edit form
-│   ├── skins/                        # Desktop/mobile platform wrappers
-│   └── ui/                           # shadcn/ui components (40+ components)
-│
-├── lib/                              # FRONTEND - Core libraries
-│   ├── config.ts                     # Backend provider + environment config
-│   ├── app.config.ts                 # App branding, SEO, theme, social links
-│   ├── auth-config.ts                # Auth method configuration
-│   ├── env.ts                        # Runtime environment detection
-│   ├── backend/                      # Multi-provider abstraction layer
-│   │   ├── index.ts                  # Backend factory (picks provider)
-│   │   ├── nself/                    # nSelf adapter (Hasura + Auth + Storage)
-│   │   ├── supabase/                 # Supabase adapter
-│   │   └── nhost/                    # Nhost adapter
-│   ├── providers/                    # React contexts
-│   │   ├── auth-provider.tsx         # Auth state, signIn/signOut/signUp
-│   │   ├── backend-provider.tsx      # Backend client singleton
-│   │   ├── theme-provider.tsx        # Light/dark mode
-│   │   └── offline-provider.tsx      # Offline detection + queue
-│   ├── services/                     # Business logic wrappers
-│   │   ├── todos.ts                  # Todo CRUD operations
-│   │   └── profile.ts                # Profile + avatar operations
-│   ├── types/                        # TypeScript interfaces
-│   │   └── backend.ts                # AuthAdapter, DatabaseAdapter, etc.
-│   ├── offline/                      # Offline-first utilities
-│   └── platform/                     # Platform detection, native APIs
-│
-├── hooks/                            # FRONTEND - Custom React hooks (20+)
-│   ├── use-query.ts                  # Data fetching with cache
-│   ├── use-mutation.ts               # Insert/update/delete
-│   ├── use-realtime.ts               # WebSocket subscriptions
-│   ├── use-storage.ts                # File upload/download
-│   ├── use-toast.ts                  # Toast notifications
-│   └── ...                           # Debounce, pagination, keyboard, etc.
-│
-├── public/                           # Static assets (replace with your own)
-│   ├── icon.svg                      # App icon (placeholder)
-│   ├── logo.svg                      # Logo light mode (placeholder)
-│   ├── logo-dark.svg                 # Logo dark mode (placeholder)
-│   ├── og-image.svg                  # Social sharing image (placeholder)
-│   ├── manifest.json                 # PWA manifest
-│   └── robots.txt                    # Search engine rules
-│
-├── src-tauri/                        # DESKTOP - Tauri desktop app config
+├── .gitignore                        # Git ignore patterns
+├── LICENSE                           # nself.org Personal Use License
+└── README.md                         # This file
 │   ├── tauri.conf.json               # Window size, permissions, bundle ID
 │   └── src/main.rs                   # Tauri entry point
 │
@@ -208,7 +226,7 @@ nself-app/
 │
 ├── .env                              # Active environment (gitignored)
 ├── .env.example                      # Full env reference with all providers
-├── .env.local.example                # nSelf local dev template
+├── .env.local.example                # ɳSelf local dev template
 ├── .env.staging.example              # Staging template
 ├── .env.production.example           # Production template
 │
@@ -228,7 +246,7 @@ nself-app/
 
 ## Backend
 
-The `/backend` directory contains the complete nSelf backend stack. It runs PostgreSQL, Hasura GraphQL Engine, Hasura Auth, Hasura Storage, and MinIO -- all orchestrated with Docker Compose.
+The `/backend` directory contains the complete ɳSelf backend stack. It runs PostgreSQL, Hasura GraphQL Engine, Hasura Auth, Hasura Storage, and MinIO -- all orchestrated with Docker Compose.
 
 **Full documentation: [`backend/README.md`](backend/README.md)**
 
@@ -341,7 +359,7 @@ NEXT_PUBLIC_BACKEND_PROVIDER=nhost      # Nhost (managed Hasura)
 
 ### Comparison
 
-| Feature          | nSelf                        | Supabase                    | Nhost                        | Bolt                  |
+| Feature          | ɳSelf                        | Supabase                    | Nhost                        | Bolt                  |
 | ---------------- | ---------------------------- | --------------------------- | ---------------------------- | --------------------- |
 | **Database**     | Hasura GraphQL over Postgres | PostgREST over Postgres     | Hasura GraphQL over Postgres | PostgREST (managed)   |
 | **Auth**         | Hasura Auth (JWT)            | Supabase Auth (JWT)         | Hasura Auth (JWT)            | Supabase Auth (JWT)   |
@@ -355,10 +373,10 @@ NEXT_PUBLIC_BACKEND_PROVIDER=nhost      # Nhost (managed Hasura)
 
 ### When to Use Which
 
-- **nSelf**: You want full control, own your data, self-host everything. Best for production apps where you need to scale on your own terms.
+- **ɳSelf**: You want full control, own your data, self-host everything. Best for production apps where you need to scale on your own terms.
 - **Supabase**: You want a managed service with a generous free tier. Great for prototyping and small-to-medium apps.
 - **Nhost**: You want managed Hasura without running your own infrastructure. Good balance of control and convenience.
-- **Bolt**: You're prototyping in Bolt.new and want instant backend. Switch to nSelf or Supabase when going to production.
+- **Bolt**: You're prototyping in Bolt.new and want instant backend. Switch to ɳSelf or Supabase when going to production.
 
 ---
 
@@ -421,9 +439,9 @@ NEXT_PUBLIC_NHOST_ADMIN_SECRET=       # Nhost admin secret (dev only!)
 | File                      | Use Case                          | Provider |
 | ------------------------- | --------------------------------- | -------- |
 | `.env.example`            | Complete reference, all variables | All      |
-| `.env.local.example`      | Local development                 | nSelf    |
-| `.env.staging.example`    | Staging server                    | nSelf    |
-| `.env.production.example` | Production deployment             | nSelf    |
+| `.env.local.example`      | Local development                 | ɳSelf    |
+| `.env.staging.example`    | Staging server                    | ɳSelf    |
+| `.env.production.example` | Production deployment             | ɳSelf    |
 
 ---
 
@@ -449,7 +467,7 @@ The `.bolt/prompt` file contains instructions for Bolt. When you open this proje
 **What to tell Bolt:**
 
 ```
-This project uses the nApp boilerplate with a backend abstraction layer.
+This project uses the ɳApp boilerplate with a backend abstraction layer.
 Never import @supabase/supabase-js or any backend SDK directly.
 Use hooks from @/hooks and @/lib/providers for all operations.
 See .cursorrules for the full coding guide.
@@ -460,19 +478,19 @@ See .cursorrules for the full coding guide.
 Lovable works similarly. Import the repo and tell it:
 
 ```
-This is an nApp boilerplate project. The backend is abstracted behind
+This is an ɳApp boilerplate project. The backend is abstracted behind
 hooks and providers in lib/backend, lib/providers, and hooks/.
 Never use backend SDKs directly. Use useAuth(), useQuery(), useMutation(),
 useStorage(), and useRealtime() hooks.
 Components use shadcn/ui, Tailwind CSS, and Lucide React icons.
 ```
 
-### AI Assistant (AI Company)
+### AI agents (AI Company)
 
-When using AI Assistant (via API, claude.ai, or AI Code):
+When using AI agents (via API, AI platforms, or AI Code):
 
 ```
-I'm working on an nApp project. It has a backend abstraction layer.
+I'm working on an ɳApp project. It has a backend abstraction layer.
 The key files are:
 - lib/backend/index.ts (backend factory)
 - lib/types/backend.ts (TypeScript interfaces)
@@ -496,9 +514,9 @@ The `.cursorrules` file is automatically loaded by Cursor. It contains:
 
 Just open the project in Cursor and start coding. The rules are applied automatically.
 
-### GitHub Copilot
+### AI Code Assistants
 
-Add this to your repository's `.github/copilot-instructions.md` (or use the built-in `.cursorrules`):
+Add this to your repository's `.github/ai-instructions.md` (or use the built-in `.cursorrules`):
 
 ```
 This project uses a backend abstraction layer.
@@ -661,13 +679,13 @@ When you clone this boilerplate to start a real app, work through this list:
 ### 3. Environment
 
 - [ ] Copy `.env.example` to `.env` and set your backend provider
-- [ ] If using nSelf: copy `backend/.env.example` to `backend/.env` and set passwords
+- [ ] If using ɳSelf: copy `backend/.env.example` to `backend/.env` and set passwords
 - [ ] Change ALL default passwords and secrets before any non-local deployment
 - [ ] Set up your domain and DNS records for staging/production
 
 ### 4. Backend
 
-- [ ] If using nSelf: customize `backend/postgres/init.sql` with your tables
+- [ ] If using ɳSelf: customize `backend/postgres/init.sql` with your tables
 - [ ] Update `backend/hasura/metadata/databases/default/tables/tables.yaml` with permissions
 - [ ] If using Supabase: create tables in Supabase Dashboard or via migrations
 - [ ] Set up storage buckets for your file types
@@ -677,7 +695,7 @@ When you clone this boilerplate to start a real app, work through this list:
 - [ ] Configure auth methods in `lib/auth-config.ts`
 - [ ] Set up OAuth providers if needed (Google, GitHub, Apple, etc.)
 - [ ] Update `middleware.ts` with your protected route patterns
-- [ ] If using nSelf: configure OAuth in `backend/.env`
+- [ ] If using ɳSelf: configure OAuth in `backend/.env`
 
 ### 6. SEO & Legal
 
@@ -770,7 +788,7 @@ This is only available when `NEXT_PUBLIC_ENVIRONMENT=local`.
 
 ### Hasura Console
 
-When running nSelf locally, the Hasura Console at `http://localhost:8080/console` provides:
+When running ɳSelf locally, the Hasura Console at `http://localhost:8080/console` provides:
 
 - Visual table editor
 - GraphQL playground
@@ -833,7 +851,7 @@ When running nSelf locally, the Hasura Console at `http://localhost:8080/console
 | **Forms**      | React Hook Form + Zod       | Validation and submission        |
 | **State**      | React Context + Hooks       | No external state library        |
 | **Database**   | PostgreSQL 16               | Via Hasura or Supabase           |
-| **GraphQL**    | Hasura + graphql-request    | For nSelf and Nhost              |
+| **GraphQL**    | Hasura + graphql-request    | For ɳSelf and Nhost              |
 | **Auth**       | Hasura Auth / Supabase Auth | JWT-based authentication         |
 | **Storage**    | MinIO / Supabase Storage    | S3-compatible file storage       |
 | **Desktop**    | Tauri v2                    | Native desktop apps              |
@@ -870,10 +888,10 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Credits
 
-Built by the nSelf community.
+Built by the ɳSelf community.
 
 Part of the **n ecosystem**:
 
-- [nSelf](https://github.com/acamarata/nself) - Self-hosted backend stack
-- [nApp](https://github.com/acamarata/nself-app) - Application boilerplate (this repo)
+- [ɳSelf](https://github.com/acamarata/nself) - Self-hosted backend stack
+- [ɳApp](https://github.com/acamarata/nself-app) - Application boilerplate (this repo)
 - [nChat](https://github.com/acamarata/nself-chat) - Real-time chat application

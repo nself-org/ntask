@@ -130,3 +130,12 @@ The boilerplate includes a complete todo application demonstrating:
 ---
 
 **Ready to build something amazing?** [Get Started →](Getting-Started)
+
+---
+
+## Project Resources
+
+- [Changelog](Changelog.md) — Version history and release notes
+- [Contributing](Contributing.md) — How to contribute to this project
+- [Security](Security.md) — Security best practices and guidelines
+- [License](LICENSE.md) — Licensing terms and conditions

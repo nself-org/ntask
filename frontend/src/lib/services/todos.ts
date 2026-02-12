@@ -1,5 +1,6 @@
 import { getBackend } from '../backend';
 import type { BackendClient } from '../types/backend';
+import { Tables } from '../utils/tables';
 
 export interface Todo {
   id: string;
@@ -44,7 +45,7 @@ export class TodoService {
   }
 
   async getTodos(): Promise<Todo[]> {
-    const { data, error } = await this.backend.db.query<Todo>('app_todos', {
+    const { data, error } = await this.backend.db.query<Todo>(Tables.TODOS, {
       orderBy: [{ column: 'created_at', ascending: false }],
     });
 
@@ -53,7 +54,7 @@ export class TodoService {
   }
 
   async getTodoById(id: string): Promise<Todo | null> {
-    const { data, error } = await this.backend.db.queryById<Todo>('app_todos', id);
+    const { data, error } = await this.backend.db.queryById<Todo>(Tables.TODOS, id);
 
     if (error) throw new Error(error);
     return data;
@@ -63,7 +64,7 @@ export class TodoService {
     const user = await this.backend.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
-    const { data, error } = await this.backend.db.insert<Todo>('app_todos', {
+    const { data, error } = await this.backend.db.insert<Todo>(Tables.TODOS, {
       user_id: user.id,
       title: input.title,
       completed: input.completed ?? false,
@@ -76,7 +77,7 @@ export class TodoService {
   }
 
   async updateTodo(id: string, input: UpdateTodoInput): Promise<Todo> {
-    const { data, error } = await this.backend.db.update<Todo>('app_todos', id, input as Record<string, unknown>);
+    const { data, error } = await this.backend.db.update<Todo>(Tables.TODOS, id, input as Record<string, unknown>);
 
     if (error) throw new Error(error);
     if (!data) throw new Error('Failed to update todo');
@@ -84,7 +85,7 @@ export class TodoService {
   }
 
   async deleteTodo(id: string): Promise<void> {
-    const { error } = await this.backend.db.remove('app_todos', id);
+    const { error } = await this.backend.db.remove(Tables.TODOS, id);
 
     if (error) throw new Error(error);
   }
@@ -106,7 +107,7 @@ export class TodoService {
   // --- Sharing ---
 
   async getShares(todoId: string): Promise<TodoShare[]> {
-    const { data, error } = await this.backend.db.query<TodoShare>('app_todo_shares', {
+    const { data, error } = await this.backend.db.query<TodoShare>(Tables.TODO_SHARES, {
       where: { todo_id: todoId },
       orderBy: [{ column: 'created_at', ascending: false }],
     });
@@ -116,7 +117,7 @@ export class TodoService {
   }
 
   async shareTodo(input: ShareTodoInput): Promise<TodoShare> {
-    const { data, error } = await this.backend.db.insert<TodoShare>('app_todo_shares', {
+    const { data, error } = await this.backend.db.insert<TodoShare>(Tables.TODO_SHARES, {
       todo_id: input.todo_id,
       shared_with_email: input.shared_with_email,
       permission: input.permission,
@@ -128,13 +129,13 @@ export class TodoService {
   }
 
   async removeShare(shareId: string): Promise<void> {
-    const { error } = await this.backend.db.remove('app_todo_shares', shareId);
+    const { error } = await this.backend.db.remove(Tables.TODO_SHARES, shareId);
 
     if (error) throw new Error(error);
   }
 
   async updateSharePermission(shareId: string, permission: 'view' | 'edit'): Promise<TodoShare> {
-    const { data, error } = await this.backend.db.update<TodoShare>('app_todo_shares', shareId, { permission });
+    const { data, error } = await this.backend.db.update<TodoShare>(Tables.TODO_SHARES, shareId, { permission });
 
     if (error) throw new Error(error);
     if (!data) throw new Error('Failed to update share');
@@ -142,7 +143,7 @@ export class TodoService {
   }
 
   subscribeToTodos(callback: (todos: Todo[]) => void): () => void {
-    const channel = this.backend.realtime.channel('app_todos');
+    const channel = this.backend.realtime.channel(Tables.TODOS);
 
     channel
       .on('*', async () => {
@@ -152,7 +153,7 @@ export class TodoService {
       .subscribe();
 
     return () => {
-      this.backend.realtime.removeChannel('app_todos');
+      this.backend.realtime.removeChannel(Tables.TODOS);
     };
   }
 }

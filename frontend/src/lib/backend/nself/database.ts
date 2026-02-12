@@ -1,12 +1,13 @@
 import { gql } from 'graphql-request';
-import type { DatabaseAdapter, QueryOptions, MutationResult } from '@/lib/types/backend';
+import type { DatabaseAdapter, QueryOptions, MutationResult} from '@/lib/types/backend';
 import { getGraphQLClient } from './graphql-client';
+import { Tables } from '@/lib/utils/tables';
 
 /** Table-specific default field sets so queries return full objects, not just { id } */
 const TABLE_FIELDS: Record<string, string> = {
-  app_todos: 'id user_id title completed is_public created_at updated_at',
-  app_profiles: 'id email display_name avatar_url bio created_at updated_at',
-  app_todo_shares: 'id todo_id shared_with_email permission created_at',
+  [Tables.TODOS]: 'id user_id title completed is_public created_at updated_at',
+  [Tables.PROFILES]: 'id email display_name avatar_url bio created_at updated_at',
+  [Tables.TODO_SHARES]: 'id todo_id shared_with_email permission created_at',
 };
 
 function getFieldsForTable(table: string, select?: string): string {

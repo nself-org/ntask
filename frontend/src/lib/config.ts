@@ -11,6 +11,10 @@ export const config = {
   appUrl: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   appVersion: process.env.NEXT_PUBLIC_APP_VERSION || '0.1.0',
 
+  // Table prefix for monorepo scenarios
+  // Change this to a unique value per app when sharing one backend
+  tablePrefix: process.env.NEXT_PUBLIC_TABLE_PREFIX || 'app',
+
   debug: process.env.NEXT_PUBLIC_DEBUG === 'true',
 
   supabase: {

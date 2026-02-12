@@ -1,5 +1,6 @@
 import { getBackend } from '../backend';
 import type { BackendClient } from '../types/backend';
+import { Tables } from '../utils/tables';
 
 export interface Profile {
   id: string;
@@ -28,7 +29,7 @@ export class ProfileService {
     const user = await this.backend.auth.getUser();
     if (!user) return null;
 
-    const { data, error } = await this.backend.db.queryById<Profile>('app_profiles', user.id);
+    const { data, error } = await this.backend.db.queryById<Profile>(Tables.PROFILES, user.id);
 
     if (error) throw new Error(error);
     return data;
@@ -38,7 +39,7 @@ export class ProfileService {
     const user = await this.backend.auth.getUser();
     if (!user) throw new Error('User not authenticated');
 
-    const { data, error } = await this.backend.db.update<Profile>('app_profiles', user.id, input as Record<string, unknown>);
+    const { data, error } = await this.backend.db.update<Profile>(Tables.PROFILES, user.id, input as Record<string, unknown>);
 
     if (error) throw new Error(error);
     if (!data) throw new Error('Failed to update profile');

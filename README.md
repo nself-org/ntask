@@ -1,4 +1,4 @@
-# ɳApp
+# ɳDemo
 
 **The "code once, deploy everywhere" boilerplate for modern applications.**
 
@@ -11,7 +11,7 @@ A production-ready monorepo boilerplate with a self-hosted backend (ɳSelf) and 
 
 ## What Is This?
 
-This is a **boilerplate**, not a finished application. It provides:
+This is a **production-ready demo application** showcasing the ɳSelf platform. Use it as a reference implementation and boilerplate. It provides:
 
 - A complete **backend stack** (PostgreSQL + Hasura + Auth + Storage) that runs anywhere Docker runs
 - A universal **frontend app** (Next.js + TypeScript + Tailwind) that deploys to web, desktop, and mobile
@@ -68,48 +68,201 @@ The key insight: **your frontend code never imports backend SDKs directly.** Eve
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
-### Option A: Full Stack (Recommended)
+**Get a production-ready full-stack app running in under 2 minutes:**
 
-Use the bootstrap script for one-command setup:
+### Prerequisites
+
+- [ɳSelf CLI](https://github.com/acamarata/nself) installed:
+  ```bash
+  curl -sSL https://install.nself.org | bash
+  ```
+- [Docker](https://docs.docker.com/get-docker/) running
+- [Node.js](https://nodejs.org/) 18+ and [pnpm](https://pnpm.io/installation)
+
+### Start Your App
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/acamarata/nself-app.git
-cd nself-app
+git clone https://github.com/acamarata/nself-demo.git my-app
+cd my-app
 
-# 2. Bootstrap everything (requires Docker + pnpm)
-./backend/scripts/bootstrap.sh
+# 2. Start the backend (one command - auto-builds on first run!)
+nself start
 
-# 3. Start backend services
-cd backend && docker-compose up -d
-
-# 4. Start frontend
-cd ../frontend && pnpm dev
+# 3. Start the frontend (in new terminal)
+cd frontend
+pnpm install && pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) -- your app is running.
-Open [http://localhost:8080/console](http://localhost:8080/console) -- Hasura Console.
+**That's it!** Your complete application with database, GraphQL API, auth, storage, and frontend is now running.
 
-### Option B: Frontend Only (Supabase / Nhost)
+### 🎯 Access Your App
 
-If using a managed backend, skip Docker:
+| Service | URL | Description |
+|---------|-----|-------------|
+| **🌐 App** | http://localhost:3000 | Your Next.js frontend |
+| **🚀 GraphQL API** | https://api.local.nself.org/v1/graphql | Hasura GraphQL endpoint |
+| **📊 Console** | https://console.local.nself.org | Hasura admin console |
+| **🔐 Auth** | https://auth.local.nself.org | Auth service API |
+| **📦 Storage** | https://storage.local.nself.org | File storage API |
+| **📧 Email (dev)** | https://mail.local.nself.org | Email testing UI |
+
+All `*.local.nself.org` domains work with **automatic SSL certificates** (no browser warnings!) thanks to ɳSelf's smart SSL system.
+
+**First time?** Run `nself trust` to install the SSL certificate (one-time setup).
+
+### What `nself start` Does
+
+When you run this command, ɳSelf automatically:
+
+- ✅ **Launches PostgreSQL** with all extensions configured
+- ✅ **Starts Hasura GraphQL Engine** with your schema and permissions
+- ✅ **Starts Auth service** with email + OAuth providers ready
+- ✅ **Starts Storage service** with S3-compatible object storage (MinIO)
+- ✅ **Applies database migrations** and creates your tables
+- ✅ **Sets up real-time WebSocket subscriptions** for collaborative features
+- ✅ **Configures SSL certificates** for all `*.local.nself.org` domains
+- ✅ **Sets up nginx reverse proxy** with intelligent routing
+
+**Zero configuration required.** Everything just works out of the box.
+
+> **Note**: On first run, `nself start` will automatically run `nself build` to generate the Docker Compose configuration. This takes about 30 seconds the first time, then subsequent starts are instant.
+
+### First Login
+
+After starting the app, you can either:
+
+1. **Register a new account** at <http://localhost:3000/register>
+2. **Use demo accounts** (run seed script first: `cd backend && pnpm run seed`):
+   - `owner@nself.org` / `password` (Owner role)
+   - `admin@nself.org` / `password` (Admin role)
+   - `user@nself.org` / `password` (User role)
+
+Demo accounts come with sample lists and todos to explore the features.
+
+### Alternative: Using Docker Compose Directly
+
+If you prefer traditional Docker Compose (without ɳSelf CLI):
 
 ```bash
-git clone https://github.com/acamarata/nself-app.git
-cd nself-app/frontend
+# Backend - uses the ready-to-go docker-compose.yml
+cd backend
+cp .env.example .env  # Copy environment file
+make up               # Start all services
 
-# Copy and configure environment
+# Frontend (in new terminal)
+cd frontend
+pnpm install && pnpm dev
+```
+
+**Access points when using Docker Compose directly**:
+- App: http://localhost:3000
+- GraphQL API: http://localhost:8080/v1/graphql
+- Hasura Console: http://localhost:8080/console
+- Auth: http://localhost:4000
+
+> **Note**: The `backend/` folder contains a complete, ready-to-use Docker Compose setup as a reference example. This is useful for developers who want to understand the infrastructure or deploy without the ɳSelf CLI.
+
+### ⚙️ What Just Happened?
+
+The `nself start` command:
+- ✅ Launched PostgreSQL database
+- ✅ Started Hasura GraphQL Engine
+- ✅ Initialized authentication service
+- ✅ Set up MinIO object storage
+- ✅ Configured automatic SSL certificates
+- ✅ Created all database tables (`app_lists`, `app_todos`, `app_profiles`, `app_list_shares`, `app_list_presence`, etc.)
+- ✅ Applied permissions and RLS policies
+- ✅ Set up real-time subscriptions for collaborative features
+- ✅ Started email service (MailPit for dev)
+
+**Everything is production-ready** with zero configuration!
+
+---
+
+## 🔧 Alternative Setup Options
+
+### Option A: Using Docker Compose (Without ɳSelf CLI)
+
+If you don't want to use the ɳSelf CLI:
+
+```bash
+cd backend
+docker-compose up -d
+cd ../frontend
+pnpm install && pnpm dev
+```
+
+**Access:**
+- App: http://localhost:3000
+- Hasura: http://localhost:8080/console
+- Auth: http://localhost:4000
+
+### Option B: Frontend Only (Managed Backend)
+
+Using Supabase or Nhost? Skip the backend entirely:
+
+```bash
+git clone https://github.com/acamarata/nself-demo.git my-app
+cd my-app/frontend
+
+# Configure your backend
 cp env/.env.local.example env/.env.local
 # Edit env/.env.local:
 #   NEXT_PUBLIC_BACKEND_PROVIDER=supabase
-#   NEXT_PUBLIC_SUPABASE_URL=your-url
-#   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-key
+#   NEXT_PUBLIC_SUPABASE_URL=your-project-url
+#   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
-pnpm install
-pnpm dev
+pnpm install && pnpm dev
 ```
+
+---
+
+## 📖 Next Steps
+
+1. **Explore the Collaborative Lists App**
+   - Create multiple todo lists with custom colors and descriptions
+   - Share lists with other users (owner/editor/viewer permissions)
+   - See real-time presence - know who's viewing or editing
+   - Collaborate in real-time with instant updates
+2. **Customize Your Database** - Add your own tables via Hasura Console
+3. **Build Your Features** - Use the lists app as a reference implementation
+4. **Deploy to Production** - See [Deployment Guide](.wiki/Deployment.md)
+
+---
+
+## ✨ Key Features
+
+### Collaborative Todo Lists
+
+- **Multiple Lists**: Organize todos into separate lists with custom colors and icons
+- **Real-time Collaboration**: See who's viewing or editing a list in real-time
+- **Advanced Sharing**: Share lists with granular permissions (owner/editor/viewer)
+- **Presence Tracking**: Live avatars showing active collaborators
+- **Instant Updates**: Changes sync across all users immediately
+- **Invite System**: Email-based invites with pending/accepted status
+- **Public Links**: Copy shareable links to lists
+
+### Cross-Platform Support
+
+Works seamlessly on:
+
+- **Web** (Next.js - any browser)
+- **Desktop** (Tauri - macOS, Windows, Linux)
+- **Mobile** (PWA - iOS, Android)
+- **Offline Mode** (service workers + local caching)
+
+---
+
+## 🎓 Learn More
+
+- **[Full Documentation](.wiki/Home.md)** - Complete guides and reference
+- **[Frontend Guide](frontend/README.md)** - Frontend architecture deep-dive
+- **[Monorepo Setup](.wiki/Monorepo-Setup.md)** - Multi-app configuration
+- **[Backend Setup](.wiki/Backend-Setup.md)** - Backend services explained
+- **[Database Schema](.wiki/Database-Schema.md)** - Understanding the data model
 
 ### Option C: AI Agent Development
 
@@ -120,7 +273,7 @@ Open this repo in Bolt.new, Lovable, or any AI coding agent. The `.bolt/prompt`,
 ## Project Structure
 
 ```
-nself-app/
+nself-demo/
 ├── .ai/                              # AI agent workspace (gitignored)
 #   ├── agent-workspace/                       # AI agent files
 │   ├── agent-b/                        # Agent B files
@@ -467,7 +620,7 @@ The `.bolt/prompt` file contains instructions for Bolt. When you open this proje
 **What to tell Bolt:**
 
 ```
-This project uses the ɳApp boilerplate with a backend abstraction layer.
+This project uses the ɳDemo boilerplate with a backend abstraction layer.
 Never import @supabase/supabase-js or any backend SDK directly.
 Use hooks from @/hooks and @/lib/providers for all operations.
 See .cursorrules for the full coding guide.
@@ -478,7 +631,7 @@ See .cursorrules for the full coding guide.
 Lovable works similarly. Import the repo and tell it:
 
 ```
-This is an ɳApp boilerplate project. The backend is abstracted behind
+This is an ɳDemo boilerplate project. The backend is abstracted behind
 hooks and providers in lib/backend, lib/providers, and hooks/.
 Never use backend SDKs directly. Use useAuth(), useQuery(), useMutation(),
 useStorage(), and useRealtime() hooks.
@@ -490,7 +643,7 @@ Components use shadcn/ui, Tailwind CSS, and Lucide React icons.
 When using AI agents (via API, AI platforms, or AI Code):
 
 ```
-I'm working on an ɳApp project. It has a backend abstraction layer.
+I'm working on an ɳDemo project. It has a backend abstraction layer.
 The key files are:
 - lib/backend/index.ts (backend factory)
 - lib/types/backend.ts (TypeScript interfaces)
@@ -870,7 +1023,7 @@ When running ɳSelf locally, the Hasura Console at `http://localhost:8080/consol
 
 Contributions are welcome. Please read [CONTRIBUTING.md](.wiki/Contributing.md) before submitting PRs.
 
-For complete documentation, visit the [Wiki](https://github.com/acamarata/nself-app/wiki).
+For complete documentation, visit the [Wiki](https://github.com/acamarata/nself-demo/wiki).
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feat/my-feature`)
@@ -893,5 +1046,5 @@ Built by the ɳSelf community.
 Part of the **n ecosystem**:
 
 - [ɳSelf](https://github.com/acamarata/nself) - Self-hosted backend stack
-- [ɳApp](https://github.com/acamarata/nself-app) - Application boilerplate (this repo)
+- [ɳDemo](https://github.com/acamarata/nself-demo) - Application boilerplate (this repo)
 - [nChat](https://github.com/acamarata/nself-chat) - Real-time chat application

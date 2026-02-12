@@ -1,13 +1,15 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTodos } from '@/hooks/use-todos';
+import { usePreferences } from '@/hooks/use-preferences';
 import { TodoItem } from './todo-item';
 import { CreateTodoForm } from './create-todo-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import type { CreateTodoInput, UpdateTodoInput } from '@/lib/services/todos';
+import type { CreateTodoInput, UpdateTodoInput } from '@/lib/types/todos';
 
 interface TodoListProps {
   listId: string;
@@ -27,6 +29,16 @@ export function TodoList({ listId }: TodoListProps) {
     removeShare,
     getShares,
   } = useTodos(listId);
+
+  const { preferences } = usePreferences();
+
+  // Filter todos based on auto-hide preference
+  const visibleTodos = useMemo(() => {
+    if (!preferences?.auto_hide_completed) {
+      return todos;
+    }
+    return todos.filter((todo) => !todo.completed);
+  }, [todos, preferences]);
 
   const handleCreateTodo = async (input: CreateTodoInput) => {
     await createTodo({ ...input, list_id: listId });
@@ -74,7 +86,7 @@ export function TodoList({ listId }: TodoListProps) {
           <CardDescription>Add a new task to your list</CardDescription>
         </CardHeader>
         <CardContent>
-          <CreateTodoForm onSubmit={handleCreateTodo} />
+          <CreateTodoForm listId={listId} onSubmit={handleCreateTodo} />
         </CardContent>
       </Card>
 
@@ -82,7 +94,13 @@ export function TodoList({ listId }: TodoListProps) {
         <CardHeader>
           <CardTitle>Your Todos</CardTitle>
           <CardDescription>
-            {loading ? 'Loading...' : `${todos.length} ${todos.length === 1 ? 'task' : 'tasks'}`}
+            {loading
+              ? 'Loading...'
+              : `${visibleTodos.length} ${visibleTodos.length === 1 ? 'task' : 'tasks'}${
+                  preferences?.auto_hide_completed && todos.length !== visibleTodos.length
+                    ? ` (${todos.length - visibleTodos.length} hidden)`
+                    : ''
+                }`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -92,13 +110,17 @@ export function TodoList({ listId }: TodoListProps) {
                 <Skeleton key={i} className="h-16 w-full" />
               ))}
             </div>
-          ) : todos.length === 0 ? (
+          ) : visibleTodos.length === 0 ? (
             <div className="text-center py-12 text-muted-foreground">
-              <p>No todos yet. Create your first task above!</p>
+              <p>
+                {todos.length === 0
+                  ? 'No todos yet. Create your first task above!'
+                  : 'All tasks completed! 🎉'}
+              </p>
             </div>
           ) : (
             <div className="space-y-2">
-              {todos.map((todo) => (
+              {visibleTodos.map((todo) => (
                 <TodoItem
                   key={todo.id}
                   todo={todo}

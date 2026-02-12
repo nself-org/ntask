@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { NotificationCenter } from './notification-center';
 
 export function AppHeader() {
   const { user, loading, signOut } = useAuth();
@@ -53,6 +54,8 @@ export function AppHeader() {
         </Link>
 
         <div className="flex items-center gap-2">
+          {user && <NotificationCenter />}
+
           <button
             onClick={toggleTheme}
             className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
@@ -106,8 +109,16 @@ export function AppHeader() {
                       onClick={() => setMenuOpen(false)}
                       className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
                     >
-                      <Settings className="h-4 w-4 text-muted-foreground" />
+                      <User className="h-4 w-4 text-muted-foreground" />
                       Account
+                    </Link>
+                    <Link
+                      href="/settings"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-muted"
+                    >
+                      <Settings className="h-4 w-4 text-muted-foreground" />
+                      Settings
                     </Link>
                     <div className="my-1 border-t border-border/60" />
                     <button

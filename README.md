@@ -235,24 +235,89 @@ pnpm install && pnpm dev
 
 ## ✨ Key Features
 
-### Collaborative Todo Lists
+### 🎯 **Google Docs-like Collaborative Todo Lists**
 
-- **Multiple Lists**: Organize todos into separate lists with custom colors and icons
-- **Real-time Collaboration**: See who's viewing or editing a list in real-time
-- **Advanced Sharing**: Share lists with granular permissions (owner/editor/viewer)
-- **Presence Tracking**: Live avatars showing active collaborators
-- **Instant Updates**: Changes sync across all users immediately
-- **Invite System**: Email-based invites with pending/accepted status
-- **Public Links**: Copy shareable links to lists
+This is not just a simple todo app - it's a **production-ready collaborative task management system** with 35+ advanced features:
 
-### Cross-Platform Support
+#### **📋 List Management**
+- **Multiple Lists**: Create unlimited lists with custom colors, icons, and descriptions
+- **Smart Organization**: Drag-and-drop reordering, default list support
+- **List Templates**: Shopping list, work tasks, travel checklist, etc.
+- **Location-Based Lists**: Attach geo-coordinates to lists (e.g., "Grocery - Whole Foods")
+- **Arrival Reminders**: Get notified when entering a list's location radius (100m default)
+
+#### **✅ Advanced Todo Features**
+- **Rich Task Metadata**:
+  - 📅 **Due Dates** with natural language input ("tomorrow", "next monday", "in 3 days")
+  - 🎨 **Priority Levels**: None, Low, Medium, High (color-coded)
+  - 🏷️ **Tags**: Autocomplete, multi-select, filter by tags
+  - 📝 **Notes**: Long-form notes attached to each todo
+  - 📎 **Attachments**: Multiple files per todo (images, PDFs, etc.)
+  - 📍 **Location**: Geolocation with radius-based reminders
+  - 🔁 **Recurring Tasks**: Daily, weekly, monthly patterns
+
+- **Smart Features**:
+  - ⏰ Auto-reset recurring tasks at 3:00 AM daily
+  - 🔔 Due date reminders (customizable: 60/30/15 mins before)
+  - 🌆 Evening digest at 8:00 PM with tomorrow's tasks
+  - 🗺️ Location-based reminders (uses Haversine distance calculation)
+  - 📊 Overdue highlighting with color-coded urgency
+
+#### **👥 Real-Time Collaboration**
+- **Live Presence**: See who's viewing/editing each list in real-time
+- **User Avatars**: Overlapping avatar stack (max 5 visible, "+N" for overflow)
+- **Editing Indicators**: Visual cues when someone is editing a specific todo
+- **Instant Sync**: Changes propagate to all collaborators within 500ms
+- **Conflict Resolution**: Last-write-wins with optimistic updates
+
+#### **🔐 Advanced Sharing**
+- **Granular Permissions**:
+  - 👑 **Owner**: Full control (edit, delete, share, manage permissions)
+  - ✏️ **Editor**: Can add/edit/complete todos
+  - 👁️ **Viewer**: Read-only access
+- **Invite System**: Email-based invites with pending/accepted workflow
+- **Public Links**: Generate shareable links for lists
+- **Permission Management**: Change permissions or revoke access anytime
+- **Shared Lists Dashboard**: Dedicated view for lists shared with you
+
+#### **🔔 Smart Notifications**
+- **6 Notification Types**:
+  1. New todo assigned to you
+  2. Due date reminders (configurable timing)
+  3. List shared with you
+  4. Evening reminder (daily digest)
+  5. Location reminder (when arriving at list location)
+  6. List updated by collaborators
+- **Multi-Channel**: Push (web), email, in-app notifications
+- **Notification Center**: Bell icon with unread badge, dropdown UI
+- **Smart Batching**: Prevents notification spam
+
+#### **⚙️ User Preferences**
+- **Time Format**: 12-hour vs 24-hour display
+- **Auto-Hide Completed**: Toggle to hide/show completed tasks
+- **Theme**: Light, dark, system-based
+- **Default List**: Set which list opens first
+- **Notification Settings**: Granular control over each notification type
+- **Evening Reminder Time**: Customize daily digest time
+- **Due Reminder Timing**: Set how far in advance (15, 30, 60 mins)
+
+#### **📱 Progressive Web App (PWA)**
+- **Installable**: Add to home screen on any platform
+- **Offline-First**: Service workers cache everything
+- **Background Sync**: Changes sync when connection restored
+- **Push Notifications**: Web Push API integration
+- **App Shortcuts**: Quick actions from home screen
+- **Manifest**: Full PWA manifest with 8 icon sizes
+
+#### **🌍 Cross-Platform Support**
 
 Works seamlessly on:
 
-- **Web** (Next.js - any browser)
-- **Desktop** (Tauri - macOS, Windows, Linux)
-- **Mobile** (PWA - iOS, Android)
-- **Offline Mode** (service workers + local caching)
+- **Web** (PWA - any modern browser, installable)
+- **Desktop** (Tauri - macOS, Windows, Linux native apps)
+- **iOS** (Capacitor - native iOS app)
+- **Android** (Capacitor - native Android app)
+- **Offline Mode** (Service workers with smart caching strategies)
 
 ---
 

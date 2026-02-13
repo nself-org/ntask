@@ -6,23 +6,10 @@ const config: CapacitorConfig = {
   webDir: 'out',
   server: {
     androidScheme: 'https',
-    iosScheme: 'https',
   },
   plugins: {
-    SplashScreen: {
-      launchShowDuration: 2000,
-      backgroundColor: '#6366f1',
-      showSpinner: false,
-    },
-    PushNotifications: {
-      presentationOptions: ['badge', 'sound', 'alert'],
-    },
-    LocalNotifications: {
-      smallIcon: 'ic_stat_icon_config_sample',
-      iconColor: '#6366f1',
-    },
-    Geolocation: {
-      requestPermissions: true,
+    Camera: {
+      presentationStyle: 'fullscreen',
     },
   },
 };

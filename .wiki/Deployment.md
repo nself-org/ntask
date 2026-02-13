@@ -247,13 +247,13 @@ services:
 
 ```bash
 # Build image
-docker build -t nself-app .
+docker build -t nself-demo .
 
 # Run container
 docker run -p 3000:3000 \
   -e NEXT_PUBLIC_BACKEND_PROVIDER=nself \
   -e NEXT_PUBLIC_ENVIRONMENT=production \
-  nself-app
+  nself-demo
 
 # Or use docker-compose
 docker-compose up -d
@@ -282,7 +282,7 @@ Deploy on your own server with PM2 or systemd.
 3. **Start with PM2**
 
    ```bash
-   pm2 start npm --name "nself-app" -- start
+   pm2 start npm --name "nself-demo" -- start
    pm2 save
    pm2 startup
    ```
@@ -297,7 +297,7 @@ Deploy on your own server with PM2 or systemd.
    NEXT_PUBLIC_NSELF_GRAPHQL_URL=https://api.yourdomain.com/v1/graphql
    EOF
 
-   pm2 restart nself-app --update-env
+   pm2 restart nself-demo --update-env
    ```
 
 #### Using systemd
@@ -305,7 +305,7 @@ Deploy on your own server with PM2 or systemd.
 1. **Create Service File**
 
    ```bash
-   sudo nano /etc/systemd/system/nself-app.service
+   sudo nano /etc/systemd/system/nself-demo.service
    ```
 
 2. **Service Configuration**
@@ -318,7 +318,7 @@ Deploy on your own server with PM2 or systemd.
    [Service]
    Type=simple
    User=www-data
-   WorkingDirectory=/var/www/nself-app
+   WorkingDirectory=/var/www/nself-demo
    Environment="NODE_ENV=production"
    Environment="NEXT_PUBLIC_BACKEND_PROVIDER=nself"
    Environment="NEXT_PUBLIC_ENVIRONMENT=production"
@@ -332,9 +332,9 @@ Deploy on your own server with PM2 or systemd.
 3. **Enable and Start**
    ```bash
    sudo systemctl daemon-reload
-   sudo systemctl enable nself-app
-   sudo systemctl start nself-app
-   sudo systemctl status nself-app
+   sudo systemctl enable nself-demo
+   sudo systemctl start nself-demo
+   sudo systemctl status nself-demo
    ```
 
 #### Nginx Configuration
@@ -481,8 +481,8 @@ netlify rollback
 ### Docker
 
 ```bash
-docker tag nself-app:latest nself-app:backup
-docker pull nself-app:previous
+docker tag nself-demo:latest nself-demo:backup
+docker pull nself-demo:previous
 docker-compose up -d
 ```
 
@@ -501,6 +501,6 @@ docker-compose up -d
 
 **Need Help?**
 
-- [GitHub Issues](https://github.com/acamarata/nself-app/issues)
+- [GitHub Issues](https://github.com/acamarata/nself-demo/issues)
 - [Documentation](./README.md)
 - [ɳSelf Docs](https://github.com/acamarata/nself)

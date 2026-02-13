@@ -36,7 +36,7 @@
 ---
 
 ### Resources
-- [📝 Changelog](https://github.com/acamarata/nself-app/blob/main/CHANGELOG.md)
-- [🐛 Issues](https://github.com/acamarata/nself-app/issues)
-- [💬 Discussions](https://github.com/acamarata/nself-app/discussions)
-- [⭐ Star on GitHub](https://github.com/acamarata/nself-app)
+- [📝 Changelog](https://github.com/acamarata/nself-demo/blob/main/CHANGELOG.md)
+- [🐛 Issues](https://github.com/acamarata/nself-demo/issues)
+- [💬 Discussions](https://github.com/acamarata/nself-demo/discussions)
+- [⭐ Star on GitHub](https://github.com/acamarata/nself-demo)

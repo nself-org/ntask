@@ -280,6 +280,67 @@ This is not just a simple todo app - it's a **production-ready collaborative tas
 - **Permission Management**: Change permissions or revoke access anytime
 - **Shared Lists Dashboard**: Dedicated view for lists shared with you
 
+#### **🔍 Advanced Search & Filtering**
+- **Real-time Search**: Instantly search across todos, notes, and tags
+- **Multi-faceted Filters**:
+  - Filter by completion status (Active/Completed)
+  - Filter by priority level (High/Medium/Low)
+  - Filter by tags (multi-select)
+  - Filter by due date range
+- **Active Filter Badges**: Visual indicators showing active filters with quick remove
+- **Filter Persistence**: Filters stay active while navigating
+
+#### **📊 Smart Sorting**
+
+- **7 Sort Options**:
+  - Position (manual drag-and-drop order)
+  - Created (Newest first / Oldest first)
+  - Due Date (Soonest first / Latest first)
+  - Priority (High to Low)
+  - Title (A-Z alphabetically)
+- **Persistent Sort**: Sort preference remembered across sessions
+- **Visual Sort Indicator**: Clear indication of current sort order
+
+#### **⚡ Bulk Operations**
+
+- **Multi-Select Mode**: Toggle selection mode with one click
+- **Floating Action Toolbar**: Appears when items are selected
+- **Bulk Actions**:
+  - Complete multiple todos at once
+  - Uncomplete multiple todos
+  - Delete multiple todos (with confirmation)
+  - Move todos between lists (coming soon)
+- **Selection Count Badge**: Shows number of selected items
+- **Visual Selection**: Selected items highlighted with primary color
+
+#### **📅 Smart Views**
+
+- **Today View** (`/today`):
+  - See all todos due today across all lists
+  - Grouped by list with color indicators
+  - Current date prominently displayed
+- **Overdue View** (`/overdue`):
+  - All past-due incomplete todos
+  - Sorted by due date (most overdue first)
+  - Shows "overdue by X" time indicators
+  - Warning-styled UI for urgency
+- **Calendar View** (`/calendar`):
+  - Week-at-a-glance layout (Sunday-Saturday)
+  - Navigate between weeks with prev/next/today buttons
+  - Todos displayed in day columns
+  - Color-coded by list
+  - Today's column highlighted
+  - Task count badges on each day
+
+#### **📎 Attachment Management**
+
+- **Drag-and-Drop Upload**: Drop files directly onto todos
+- **File Preview**: Icons for different file types (images, documents, etc.)
+- **Download & Delete**: Full file lifecycle management
+- **File Metadata**: Shows size, upload date, and mime type
+- **Upload Progress**: Visual feedback during uploads
+- **10MB Limit**: Configurable size limits per attachment
+
 #### **🔔 Smart Notifications**
 - **6 Notification Types**:
   1. New todo assigned to you

@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Upload, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 export function ProfileForm() {
   const { profile, loading, updateProfile, uploadAvatar, deleteAvatar } = useProfile();
@@ -63,12 +64,12 @@ export function ProfileForm() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      alert('File size must be less than 2MB');
+      toast.error('File size must be less than 2MB');
       return;
     }
 
     if (!file.type.startsWith('image/')) {
-      alert('File must be an image');
+      toast.error('File must be an image');
       return;
     }
 

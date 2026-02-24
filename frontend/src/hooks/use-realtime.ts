@@ -28,6 +28,7 @@ export function useRealtime(
       channel.unsubscribe();
       channelRef.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [channelName, enabled]);
 
   const send = useCallback((event: string, payload: unknown) => {

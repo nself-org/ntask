@@ -58,6 +58,7 @@ export function TVChoreBoard({ listId, listTitle }: TVChoreBoardProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusedIndex, sortedTodos]);
 
   // Auto-scroll focused item into view

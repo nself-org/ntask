@@ -134,3 +134,11 @@ bin/
 .env.secrets
 _backup*
 .volumes/
+.vscode/*
+.cursor/
+.aider/
+.aider.chat.history.md
+.continue/
+.windsurf/
+.gemini/
+.codeium/

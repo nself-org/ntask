@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.wiki/**'
+      - '.github/wiki/**'
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: Sync to Wiki
         uses: Andrew-Chen-Wang/github-wiki-action@v4
         with:
-          path: .wiki/
+          path: .github/wiki/
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_MAIL: ${{ github.actor }}@users.noreply.github.com

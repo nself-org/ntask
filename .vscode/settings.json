@@ -30,5 +30,11 @@
     "**/dist": true,
     "**/build": true,
     "**/.cache": true
-  }
+  },
+  "markdownlint.ignore": [
+    "**/.claude/**",
+    ".claude/**",
+    "**/node_modules/**",
+    "node_modules/**"
+  ]
 }

@@ -5,6 +5,7 @@ import { useList } from '@/hooks/use-lists';
 import { ListHeader } from '@/components/lists/list-header';
 import { ListSidebar } from '@/components/lists/list-sidebar';
 import { TodoList } from '@/components/todos/todo-list';
+import { TodoBoardView } from '@/components/todos/todo-board-view';
 import { TodoToolbar } from '@/components/todos/todo-toolbar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -25,6 +26,7 @@ export function ListPageContent({ listId }: ListPageContentProps) {
     field: 'position',
     ascending: true
   });
+  const [view, setView] = useState<'list' | 'board' | 'calendar'>('list');
 
   // Update filters when listId changes
   useEffect(() => {
@@ -72,7 +74,7 @@ export function ListPageContent({ listId }: ListPageContentProps) {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>List not found</AlertTitle>
           <AlertDescription>
-            The list you're looking for doesn't exist or you don't have access to it.
+            The list you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.
           </AlertDescription>
         </Alert>
       </div>
@@ -89,7 +91,7 @@ export function ListPageContent({ listId }: ListPageContentProps) {
         {/* Header */}
         <ListHeader list={list} />
 
-        {/* Toolbar with search, filters, sort */}
+        {/* Toolbar with search, filters, sort, view toggle */}
         <TodoToolbar
           search={search}
           onSearchChange={setSearch}
@@ -97,16 +99,27 @@ export function ListPageContent({ listId }: ListPageContentProps) {
           onFiltersChange={setFilters}
           sort={sort}
           onSortChange={setSort}
+          view={view}
+          onViewChange={setView}
         />
 
-        {/* Todo list */}
+        {/* Content area */}
         <div className="flex-1 overflow-y-auto p-6">
-          <TodoList
-            listId={listId}
-            search={search}
-            filters={filters}
-            sort={sort}
-          />
+          {view === 'board' ? (
+            <TodoBoardView
+              listId={listId}
+              search={search}
+              filters={filters}
+              sort={sort}
+            />
+          ) : (
+            <TodoList
+              listId={listId}
+              search={search}
+              filters={filters}
+              sort={sort}
+            />
+          )}
         </div>
       </div>
     </div>

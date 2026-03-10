@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, ArrowUpDown, Calendar, List as ListIcon, X } from 'lucide-react';
+import { Search, Filter, ArrowUpDown, Calendar, List as ListIcon, LayoutGrid, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,8 +23,8 @@ interface TodoToolbarProps {
   onFiltersChange: (filters: TodoFilters) => void;
   sort: TodoSortOptions;
   onSortChange: (sort: TodoSortOptions) => void;
-  view?: 'list' | 'calendar';
-  onViewChange?: (view: 'list' | 'calendar') => void;
+  view?: 'list' | 'board' | 'calendar';
+  onViewChange?: (view: 'list' | 'board' | 'calendar') => void;
 }
 
 export function TodoToolbar({
@@ -34,7 +34,7 @@ export function TodoToolbar({
   onFiltersChange,
   sort,
   onSortChange,
-  view = 'list',
+  view = 'list' as 'list' | 'board' | 'calendar',
   onViewChange,
 }: TodoToolbarProps) {
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
@@ -242,14 +242,28 @@ export function TodoToolbar({
               size="sm"
               onClick={() => onViewChange('list')}
               className="h-7 px-2"
+              title="List view"
+              type="button"
             >
               <ListIcon className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={view === 'board' ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => onViewChange('board')}
+              className="h-7 px-2"
+              title="Board view"
+              type="button"
+            >
+              <LayoutGrid className="h-4 w-4" />
             </Button>
             <Button
               variant={view === 'calendar' ? 'secondary' : 'ghost'}
               size="sm"
               onClick={() => onViewChange('calendar')}
               className="h-7 px-2"
+              title="Calendar view"
+              type="button"
             >
               <Calendar className="h-4 w-4" />
             </Button>

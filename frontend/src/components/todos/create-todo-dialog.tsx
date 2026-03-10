@@ -16,7 +16,7 @@ import { format } from 'date-fns';
 interface CreateTodoDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  listId: string;
+  listId?: string;
   onCreate: (input: CreateTodoInput) => Promise<void>;
 }
 

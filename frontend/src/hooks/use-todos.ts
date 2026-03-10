@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { todoService, type TodoShare, type ShareTodoInput } from '@/lib/services/todos';
 import type { Todo, CreateTodoInput, UpdateTodoInput, TodoFilters, TodoPriority } from '@/lib/types/todos';
 
-export function useTodos(listId: string) {
+export function useTodos(listId?: string) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -12,7 +12,9 @@ export function useTodos(listId: string) {
     try {
       setLoading(true);
       setError(null);
-      const data = await todoService.getTodos(listId);
+      const data = listId
+        ? await todoService.getTodos(listId)
+        : await todoService.getAllUserTodos();
       setTodos(data);
     } catch (err) {
       const error = err as Error;
@@ -25,6 +27,8 @@ export function useTodos(listId: string) {
 
   useEffect(() => {
     fetchTodos();
+
+    if (!listId) return;
 
     const unsubscribe = todoService.subscribeToTodos(listId, (updatedTodos) => {
       setTodos(updatedTodos);

@@ -112,7 +112,7 @@ export interface RecurringInstance {
 }
 
 export interface CreateTodoInput {
-  list_id: string;
+  list_id?: string;
   title: string;
   completed?: boolean;
   is_public?: boolean;

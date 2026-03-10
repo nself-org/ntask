@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import type { CreateTodoInput, UpdateTodoInput, TodoFilters, TodoSortOptions, TodoPriority } from '@/lib/types/todos';
 
 interface TodoListProps {
-  listId: string;
+  listId?: string;
   search?: string;
   filters?: TodoFilters;
   sort?: TodoSortOptions;
@@ -137,7 +137,7 @@ export function TodoList({ listId, search = '', filters, sort }: TodoListProps) 
   }, [todos, search, filters, sort, preferences]);
 
   const handleCreateTodo = async (input: CreateTodoInput) => {
-    await createTodo({ ...input, list_id: listId });
+    await createTodo(listId ? { ...input, list_id: listId } : input);
   };
 
   const handleToggleTodo = async (id: string) => {
@@ -271,7 +271,7 @@ export function TodoList({ listId, search = '', filters, sort }: TodoListProps) 
   // Quick-add handler
   const handleQuickAdd = useCallback(async (title: string, priority?: TodoPriority) => {
     await createTodo({
-      list_id: listId,
+      ...(listId ? { list_id: listId } : {}),
       title,
       priority: priority || 'none',
     });

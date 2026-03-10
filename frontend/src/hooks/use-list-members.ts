@@ -90,12 +90,12 @@ export function useListMembers(listId: string) {
 /**
  * Hook to get user's role in a list
  */
-export function useUserRole(listId: string, userId: string | undefined) {
+export function useUserRole(listId: string | undefined, userId: string | undefined) {
   const [role, setRole] = useState<ListMemberRole | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!userId) {
+    if (!userId || !listId) {
       setRole(null);
       setLoading(false);
       return;
@@ -129,7 +129,7 @@ export function useUserRole(listId: string, userId: string | undefined) {
 /**
  * Hook to check if user can approve tasks
  */
-export function useCanApprove(listId: string, userId: string | undefined) {
+export function useCanApprove(listId: string | undefined, userId: string | undefined) {
   const { role, loading } = useUserRole(listId, userId);
   const canApprove = role === 'owner' || role === 'admin';
   return { canApprove, role, loading };

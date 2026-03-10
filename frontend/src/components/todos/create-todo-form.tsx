@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react';
 import { CreateTodoDialog } from './create-todo-dialog';
 
 interface CreateTodoFormProps {
-  listId: string;
+  listId?: string;
   onSubmit: (input: CreateTodoInput) => Promise<void>;
 }
 

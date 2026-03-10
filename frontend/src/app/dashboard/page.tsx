@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/lib/providers';
 import { AppShell } from '@/components/layout/app-shell';
 import { AppHeader } from '@/components/layout/app-header';
+import { ListSidebar } from '@/components/lists/list-sidebar';
 import { TodoList } from '@/components/todos/todo-list';
 import { Loader2, ListTodo } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -33,6 +34,7 @@ export default function DashboardPage() {
   return (
     <AppShell
       header={<AppHeader />}
+      sidebar={<ListSidebar />}
       collapsible
     >
       <div className="mx-auto max-w-3xl space-y-6">

@@ -175,6 +175,27 @@ export interface TodoSortOptions {
 }
 
 /**
+ * Activity Log Types
+ */
+
+export type ActivityAction = 'created' | 'updated' | 'completed' | 'assigned' | 'deleted';
+
+export interface TodoActivity {
+  id: string;
+  todo_id: string;
+  actor_id: string;
+  action: ActivityAction;
+  metadata?: Record<string, unknown> | null;
+  created_at: string;
+  actor?: {
+    id: string;
+    display_name?: string;
+    email?: string;
+    avatar_url?: string;
+  };
+}
+
+/**
  * Notification Types
  */
 

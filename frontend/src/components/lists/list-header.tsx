@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MoreVertical, Edit, Trash2, Share2 } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, Share2, Menu } from 'lucide-react';
 import type { List } from '@/lib/types/lists';
 import { useLists } from '@/hooks/use-lists';
 import { Button } from '@/components/ui/button';
@@ -29,9 +29,10 @@ import { PresenceAvatars } from './presence-avatars';
 
 interface ListHeaderProps {
   list: List;
+  onMenuClick?: () => void;
 }
 
-export function ListHeader({ list }: ListHeaderProps) {
+export function ListHeader({ list, onMenuClick }: ListHeaderProps) {
   const router = useRouter();
   const { deleteList } = useLists();
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -50,8 +51,20 @@ export function ListHeader({ list }: ListHeaderProps) {
 
   return (
     <>
-      <div className="flex items-center justify-between border-b bg-background px-6 py-4">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between border-b bg-background px-4 py-4 md:px-6">
+        <div className="flex items-center gap-3">
+          {onMenuClick && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={onMenuClick}
+              aria-label="Open sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          )}
           <div
             className="flex h-10 w-10 items-center justify-center rounded-lg"
             style={{ backgroundColor: list.color + '20' }}

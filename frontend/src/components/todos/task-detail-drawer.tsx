@@ -25,6 +25,7 @@ import type { Todo, UpdateTodoInput, TodoPriority } from '@/lib/types/todos';
 import { useLists } from '@/hooks/use-lists';
 import { cn } from '@/lib/utils';
 import { TodoAttachments } from './todo-attachments';
+import { TodoActivityLog } from './todo-activity-log';
 import { useBackend } from '@/lib/providers/backend-provider';
 
 interface TaskDetailDrawerProps {
@@ -157,13 +158,20 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
           <SheetTitle className="sr-only">Task details</SheetTitle>
         </SheetHeader>
 
-        {/* Saving indicator */}
-        {saving && (
-          <div className="flex items-center gap-1.5 pb-2 text-xs text-muted-foreground">
-            <Loader2 className="h-3 w-3 animate-spin" />
-            Saving...
-          </div>
-        )}
+        {/* Saving indicator — aria-live announces to screen readers */}
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="pb-2"
+        >
+          {saving && (
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Loader2 className="h-3 w-3 animate-spin" aria-hidden="true" />
+              <span>Saving...</span>
+            </div>
+          )}
+        </div>
 
         {/* Title */}
         <div className="pb-4">
@@ -312,6 +320,13 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
             onUpload={handleAttachmentUpload}
             onDelete={handleAttachmentDelete}
           />
+        </div>
+
+        {/* Activity log */}
+        <Separator />
+        <div className="py-3">
+          <p className="mb-2 text-xs font-medium text-muted-foreground">Activity</p>
+          <TodoActivityLog todoId={todo.id} />
         </div>
 
         {/* Meta */}

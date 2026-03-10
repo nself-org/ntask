@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { useList } from '@/hooks/use-lists';
 import { ListHeader } from '@/components/lists/list-header';
 import { ListSidebar } from '@/components/lists/list-sidebar';
@@ -10,7 +11,8 @@ import { TodoCalendarView } from '@/components/todos/todo-calendar-view';
 import { TodoToolbar } from '@/components/todos/todo-toolbar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Menu } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import type { TodoFilters, TodoSortOptions } from '@/lib/types/todos';
 
 interface ListPageContentProps {
@@ -28,11 +30,24 @@ export function ListPageContent({ listId }: ListPageContentProps) {
     ascending: true
   });
   const [view, setView] = useState<'list' | 'board' | 'calendar'>('list');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Update filters when listId changes
   useEffect(() => {
     setFilters({ listId });
   }, [listId]);
+
+  // View-switching shortcuts
+  const switchView = useCallback((e: KeyboardEvent, v: 'list' | 'board' | 'calendar') => {
+    e.preventDefault();
+    setView(v);
+  }, []);
+
+  useKeyboardShortcuts([
+    { key: '1', description: 'List view', handler: (e) => switchView(e, 'list') },
+    { key: '2', description: 'Board view', handler: (e) => switchView(e, 'board') },
+    { key: '3', description: 'Calendar view', handler: (e) => switchView(e, 'calendar') },
+  ]);
 
   if (loading) {
     return (
@@ -84,13 +99,17 @@ export function ListPageContent({ listId }: ListPageContentProps) {
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <ListSidebar activeListId={listId} />
+      {/* Sidebar — desktop always visible, mobile controlled */}
+      <ListSidebar
+        activeListId={listId}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
 
       {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <main id="main-content" className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <ListHeader list={list} />
+        <ListHeader list={list} onMenuClick={() => setMobileSidebarOpen(true)} />
 
         {/* Toolbar with search, filters, sort, view toggle */}
         <TodoToolbar
@@ -128,7 +147,7 @@ export function ListPageContent({ listId }: ListPageContentProps) {
             />
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -168,3 +168,94 @@ jobs:
         env:
           NEXT_PUBLIC_BACKEND_PROVIDER: ${{ matrix.backend }}
           NEXT_PUBLIC_ENVIRONMENT: production
+
+  capacitor-android:
+    name: Capacitor Android Build
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js (static export for Capacitor)
+        working-directory: ./frontend
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_BACKEND_PROVIDER: nself
+          NEXT_PUBLIC_ENVIRONMENT: production
+
+      - name: Capacitor sync
+        working-directory: ./frontend
+        run: pnpm exec cap sync android
+
+      - name: Build Android (debug, compile verify only)
+        working-directory: ./frontend/android
+        run: ./gradlew assembleDebug --no-daemon
+
+  capacitor-ios:
+    name: Capacitor iOS Build
+    runs-on: macos-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js (static export for Capacitor)
+        working-directory: ./frontend
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_BACKEND_PROVIDER: nself
+          NEXT_PUBLIC_ENVIRONMENT: production
+
+      - name: Capacitor sync
+        working-directory: ./frontend
+        run: pnpm exec cap sync ios
+
+      - name: Build iOS (simulator, compile verify only)
+        working-directory: ./frontend/ios/App
+        run: |
+          xcodebuild \
+            -scheme App \
+            -destination 'generic/platform=iOS Simulator' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            build \
+            | xcpretty || exit ${PIPESTATUS[0]}

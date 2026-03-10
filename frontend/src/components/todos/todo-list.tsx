@@ -1,12 +1,26 @@
 'use client';
 
 import { useMemo, useState, useCallback } from 'react';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
 import { useTodos } from '@/hooks/use-todos';
 import { usePreferences } from '@/hooks/use-preferences';
 import { useAuth } from '@/lib/providers/auth-provider';
 import { useCanApprove } from '@/hooks/use-list-members';
 import { useListPresence } from '@/hooks/use-list-presence';
 import { TodoItem } from './todo-item';
+import { SortableTodoItem } from './sortable-todo-item';
 import { CreateTodoForm } from './create-todo-form';
 import { QuickAddTodo, QuickAddHelp } from './quick-add-todo';
 import { BulkActionsToolbar } from './bulk-actions-toolbar';
@@ -14,7 +28,8 @@ import { TaskDetailDrawer } from './task-detail-drawer';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { AlertCircle, CheckSquare } from 'lucide-react';
+import { AlertCircle, CheckSquare, PartyPopper, ClipboardList } from 'lucide-react';
+import { EmptyState } from '@/components/ui/empty-state';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import type { Todo, CreateTodoInput, UpdateTodoInput, TodoFilters, TodoSortOptions, TodoPriority } from '@/lib/types/todos';
@@ -156,6 +171,43 @@ export function TodoList({ listId, search = '', filters, sort }: TodoListProps) 
     return filtered;
   }, [todos, search, filters, sort, preferences]);
 
+  // DnD sensors — require 8px movement to start drag (prevents accidental drags on click)
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
+
+  // Only enable DnD when sorting by position
+  const isDndEnabled = sort?.field === 'position' || !sort?.field;
+
+  const handleDragEnd = useCallback(async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = visibleTodos.findIndex((t) => t.id === active.id);
+    const newIndex = visibleTodos.findIndex((t) => t.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    // Optimistically reorder in local state is handled by the sorted todos
+    // Calculate fractional positions: midpoint between neighbors
+    const reordered = arrayMove(visibleTodos, oldIndex, newIndex);
+
+    // Assign new positions: spread across 1..N*1000 gaps
+    const updates = reordered.map((t, i) => ({
+      id: t.id,
+      position: (i + 1) * 1000,
+    }));
+
+    // Find the moved item and its new neighbors
+    const movedItem = reordered[newIndex];
+    const prevItem = newIndex > 0 ? reordered[newIndex - 1] : null;
+    const nextItem = newIndex < reordered.length - 1 ? reordered[newIndex + 1] : null;
+
+    // Fractional indexing: position = midpoint between prev and next
+    const prevPos = prevItem ? prevItem.position : 0;
+    const nextPos = nextItem ? nextItem.position : (updates[updates.length - 1]?.position ?? 1000) + 1000;
+    const newPos = Math.round((prevPos + nextPos) / 2);
+
+    await updateTodo(movedItem.id, { position: newPos });
+  }, [visibleTodos, updateTodo]);
+
   const handleCreateTodo = async (input: CreateTodoInput) => {
     await createTodo(listId ? { ...input, list_id: listId } : input);
   };
@@ -289,11 +341,12 @@ export function TodoList({ listId, search = '', filters, sort }: TodoListProps) 
   }, [selectedIds, deleteTodo, handleClearSelection]);
 
   // Quick-add handler
-  const handleQuickAdd = useCallback(async (title: string, priority?: TodoPriority) => {
+  const handleQuickAdd = useCallback(async (title: string, priority?: TodoPriority, dueDate?: string) => {
     await createTodo({
       ...(listId ? { list_id: listId } : {}),
       title,
       priority: priority || 'none',
+      ...(dueDate ? { due_date: dueDate } : {}),
     });
   }, [listId, createTodo]);
 
@@ -360,37 +413,77 @@ export function TodoList({ listId, search = '', filters, sort }: TodoListProps) 
                 ))}
               </div>
             ) : visibleTodos.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
-                <p>
-                  {todos.length === 0
-                    ? 'No todos yet. Add your first task using quick-add above!'
-                    : 'All tasks completed! 🎉'}
-                </p>
-              </div>
+              todos.length === 0 ? (
+                <EmptyState
+                  icon={ClipboardList}
+                  title="No tasks yet"
+                  description="Use the quick-add input above to create your first task."
+                />
+              ) : (
+                <EmptyState
+                  icon={PartyPopper}
+                  title="All done!"
+                  description="Every task in this list is complete."
+                />
+              )
+            ) : isDndEnabled ? (
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+              >
+                <SortableContext
+                  items={visibleTodos.map((t) => t.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <div className="space-y-2">
+                    {visibleTodos.map((todo) => (
+                      <SortableTodoItem
+                        key={todo.id}
+                        todo={todo}
+                        onToggle={(id) => handleToggleTodo(id)}
+                        onUpdate={handleUpdateTodo}
+                        onDelete={handleDeleteTodo}
+                        onTogglePublic={(id) => handleTogglePublic(id)}
+                        onShare={handleShare}
+                        onRemoveShare={handleRemoveShare}
+                        getShares={getShares}
+                        onApprove={handleApprove}
+                        onReject={handleReject}
+                        canApprove={canApprove}
+                        onDetailOpen={handleOpenDrawer}
+                        selected={selectedIds.has(todo.id)}
+                        onSelectChange={handleSelectChange}
+                        selectionMode={selectionMode}
+                      />
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             ) : (
               <div className="space-y-2">
                 {visibleTodos.map((todo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={handleToggleTodo}
-                  onUpdate={handleUpdateTodo}
-                  onDelete={handleDeleteTodo}
-                  onTogglePublic={handleTogglePublic}
-                  onShare={handleShare}
-                  onRemoveShare={handleRemoveShare}
-                  getShares={getShares}
-                  onApprove={handleApprove}
-                  onReject={handleReject}
-                  canApprove={canApprove}
-                  onDetailOpen={handleOpenDrawer}
-                  selected={selectedIds.has(todo.id)}
-                  onSelectChange={handleSelectChange}
-                  selectionMode={selectionMode}
-                />
-              ))}
-            </div>
-          )}
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    onToggle={handleToggleTodo}
+                    onUpdate={handleUpdateTodo}
+                    onDelete={handleDeleteTodo}
+                    onTogglePublic={handleTogglePublic}
+                    onShare={handleShare}
+                    onRemoveShare={handleRemoveShare}
+                    getShares={getShares}
+                    onApprove={handleApprove}
+                    onReject={handleReject}
+                    canApprove={canApprove}
+                    onDetailOpen={handleOpenDrawer}
+                    selected={selectedIds.has(todo.id)}
+                    onSelectChange={handleSelectChange}
+                    selectionMode={selectionMode}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

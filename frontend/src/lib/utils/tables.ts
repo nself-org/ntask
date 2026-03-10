@@ -55,4 +55,5 @@ export const Tables = {
   USER_ROLES: getTableName('user_roles'),
   USER_PERMISSIONS: getTableName('user_permissions'),
   LIST_GROUPS: getTableName('list_groups'),
+  ACTIVITY: getTableName('activity'),
 } as const;

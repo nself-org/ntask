@@ -1,3 +1,6 @@
+const createNextIntlPlugin = require('next-intl/plugin');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,9 +13,8 @@ const nextConfig = {
     unoptimized: true,
     domains: ['localhost', 'local.nself.org'],
   },
-  // Use standalone for Docker, comment out for static export
   output: process.env.DOCKER_BUILD ? 'standalone' : undefined,
   trailingSlash: true,
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

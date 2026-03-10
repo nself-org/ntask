@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Plus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { TodoPriority } from '@/lib/types/todos';
+import { extractDueDate } from '@/lib/utils/parse-date';
 
 interface QuickAddTodoProps {
-  onAdd: (title: string, priority?: TodoPriority) => Promise<void>;
+  onAdd: (title: string, priority?: TodoPriority, dueDate?: string) => Promise<void>;
   placeholder?: string;
   className?: string;
 }
@@ -51,8 +52,9 @@ export function QuickAddTodo({ onAdd, placeholder = 'Add a task...', className }
 
     setIsAdding(true);
     try {
-      const { title, priority } = parsePriority(value);
-      await onAdd(title, priority);
+      const { title: withoutDate, dueDate } = extractDueDate(value);
+      const { title, priority } = parsePriority(withoutDate);
+      await onAdd(title, priority, dueDate ?? undefined);
       setValue('');
       inputRef.current?.focus();
     } catch {
@@ -137,17 +139,21 @@ export function QuickAddTodo({ onAdd, placeholder = 'Add a task...', className }
 export function QuickAddHelp() {
   return (
     <div className="text-xs text-muted-foreground">
-      <span>Tip: Use </span>
+      <span>Tip: </span>
       <code className="rounded bg-muted px-1 py-0.5">!1</code>
-      <span> for high priority, </span>
+      <span>/</span>
       <code className="rounded bg-muted px-1 py-0.5">!2</code>
-      <span> for medium, </span>
+      <span>/</span>
       <code className="rounded bg-muted px-1 py-0.5">!3</code>
-      <span> for low. Press </span>
+      <span> for priority. </span>
+      <code className="rounded bg-muted px-1 py-0.5">by friday</code>
+      <span>, </span>
+      <code className="rounded bg-muted px-1 py-0.5">due tomorrow</code>
+      <span>, </span>
+      <code className="rounded bg-muted px-1 py-0.5">on monday</code>
+      <span> for due date. </span>
       <code className="rounded bg-muted px-1 py-0.5">Enter</code>
-      <span> to add, </span>
-      <code className="rounded bg-muted px-1 py-0.5">Esc</code>
-      <span> to cancel.</span>
+      <span> to add.</span>
     </div>
   );
 }

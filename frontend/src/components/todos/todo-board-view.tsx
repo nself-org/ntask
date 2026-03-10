@@ -160,11 +160,12 @@ export function TodoBoardView({ listId, search = '', filters, sort }: TodoBoardV
   };
 
   const handleQuickAdd = useCallback(
-    async (title: string, priority?: TodoPriority) => {
+    async (title: string, priority?: TodoPriority, dueDate?: string) => {
       await createTodo({
         ...(listId ? { list_id: listId } : {}),
         title,
         priority: priority || 'none',
+        ...(dueDate ? { due_date: dueDate } : {}),
       });
     },
     [listId, createTodo]

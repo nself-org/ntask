@@ -18,6 +18,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { NotificationCenter } from './notification-center';
 import { CommandPalette } from '@/components/search/command-palette';
+import { KeyboardShortcutsDialog } from './keyboard-shortcuts-dialog';
 import { Button } from '@/components/ui/button';
 
 export function AppHeader() {
@@ -25,6 +26,7 @@ export function AppHeader() {
   const { resolvedTheme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,11 +39,18 @@ export function AppHeader() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Cmd+K / Ctrl+K to open command palette
+  // Global keyboard shortcuts
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       setPaletteOpen((prev) => !prev);
+      return;
+    }
+    const target = e.target as HTMLElement;
+    const inInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+    if (!inInput && e.key === '?') {
+      e.preventDefault();
+      setShortcutsOpen((prev) => !prev);
     }
   }, []);
 
@@ -197,6 +206,7 @@ export function AppHeader() {
       </header>
 
       <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />
+      <KeyboardShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
     </>
   );
 }

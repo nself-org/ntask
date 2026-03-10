@@ -1,0 +1,116 @@
+{
+  "app": {
+    "name": "ɳTasks",
+    "tagline": "Collaborative todo lists"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signOut": "Sign out",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "todos": "Todos",
+    "lists": "Lists",
+    "settings": "Settings",
+    "account": "Account"
+  },
+  "todos": {
+    "addTask": "Add a task",
+    "noTasksYet": "No tasks yet",
+    "noTasksDescription": "Use the quick-add input above to create your first task.",
+    "allDone": "All done!",
+    "allDoneDescription": "Every task in this list is complete.",
+    "quickAdd": "Quick add",
+    "taskTitle": "Task title",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "notes": "Add notes...",
+    "tags": "Tags",
+    "addTag": "Add tag...",
+    "list": "List",
+    "noList": "No list",
+    "saving": "Saving...",
+    "priorities": {
+      "none": "No priority",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
+  },
+  "lists": {
+    "title": "Lists",
+    "noListsYet": "No lists yet",
+    "createFirst": "Create your first list",
+    "manageGroups": "Manage groups",
+    "other": "Other",
+    "share": "Share",
+    "deleteList": "Delete list",
+    "editList": "Edit list",
+    "deleteConfirm": "This will permanently delete \"{name}\" and all its todos. This action cannot be undone.",
+    "listNotFound": "List not found"
+  },
+  "groups": {
+    "manageGroups": "Manage groups",
+    "newGroup": "New group",
+    "groupTitle": "Group title",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  },
+  "search": {
+    "placeholder": "Search tasks and lists...",
+    "noResults": "No results for \"{query}\"",
+    "todos": "Tasks",
+    "lists": "Lists",
+    "navigation": "Navigation",
+    "myTasks": "My Tasks",
+    "allLists": "All Lists",
+    "today": "Today",
+    "calendar": "Calendar",
+    "settings": "Settings"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "navigation": "Navigation",
+    "tasks": "Tasks",
+    "views": "Views",
+    "openPalette": "Open command palette",
+    "showShortcuts": "Show keyboard shortcuts",
+    "focusQuickAdd": "Focus quick-add input",
+    "closeDialog": "Clear / close current dialog",
+    "listView": "Switch to list view",
+    "boardView": "Switch to board view",
+    "calendarView": "Switch to calendar view"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "back": "Back",
+    "today": "Today"
+  },
+  "activity": {
+    "title": "Activity",
+    "noActivity": "No activity yet.",
+    "actions": {
+      "created": "created this task",
+      "updated": "updated this task",
+      "completed": "marked as complete",
+      "assigned": "was assigned",
+      "deleted": "deleted this task"
+    }
+  }
+}

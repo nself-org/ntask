@@ -1,0 +1,50 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/public/**'
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/src/**'
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Build (static export for Lighthouse)
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_BACKEND_PROVIDER: nself
+          NEXT_PUBLIC_HASURA_URL: http://localhost:8080/v1/graphql
+          CAPACITOR_BUILD: 'true'
+        run: pnpm build
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./frontend/.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

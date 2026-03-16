@@ -11,6 +11,16 @@ const config: CapacitorConfig = {
     Camera: {
       presentationStyle: 'fullscreen',
     },
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert'],
+    },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#6366F1',
+    },
+    SplashScreen: {
+      launchShowDuration: 0,
+    },
   },
 };
 

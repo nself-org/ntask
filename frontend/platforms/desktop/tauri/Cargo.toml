@@ -1,21 +1,31 @@
 [package]
 name = "nself-tasks"
 version = "0.1.0"
-description = "Cross-platform nSelf application"
-authors = []
-license = ""
-repository = ""
+description = "ɳTasks — cross-platform task manager"
+authors = ["nself"]
+license = "MIT"
+repository = "https://github.com/nself-org/tasks"
 edition = "2021"
-rust-version = "1.60"
+rust-version = "1.77"
+
+[lib]
+name = "nself_tasks_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "1.5", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.6", features = ["dialog-all", "fs-all", "path-all", "notification-all", "clipboard-all", "shell-open", "window-all"] }
-
-[features]
-default = ["custom-protocol"]
-custom-protocol = ["tauri/custom-protocol"]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-clipboard-manager = "2"
+tauri-plugin-window-state = "2"
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
+tauri-plugin-os = "2"
+tauri-plugin-deep-link = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

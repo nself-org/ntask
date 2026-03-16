@@ -298,3 +298,23 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build \
             | xcpretty || exit ${PIPESTATUS[0]}
+
+  typecheck-desktop:
+    name: Typecheck desktop
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install
+      - name: Typecheck
+        working-directory: frontend
+        run: pnpm typecheck

@@ -47,5 +47,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>ɳTasks uses your camera to attach photos to tasks.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ɳTasks uses your photo library to attach images to tasks.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to sign in quickly and securely.</string>
+	<key>NSUserNotificationAlertStyle</key>
+	<string>alert</string>
 </dict>
 </plist>

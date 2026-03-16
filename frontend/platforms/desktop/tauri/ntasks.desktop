@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=ɳTasks
+Comment=Self-hosted task management
+Exec=nself-tasks
+Icon=ntasks
+Terminal=false
+Type=Application
+Categories=Office;ProjectManagement;
+Keywords=tasks;todo;productivity;
+StartupNotify=true
+StartupWMClass=nself-tasks

@@ -66,7 +66,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final newUrl = ctrl.text.trim();
     if (newUrl.isEmpty) return;
     await ref.read(backendServiceProvider).setServerUrl(newUrl);
-    if (!mounted) return;
+    if (!context.mounted) return;
     setState(() => _serverUrl = newUrl);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(l10n.serverUrlSaved)),

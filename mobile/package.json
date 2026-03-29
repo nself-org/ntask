@@ -9,7 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~55.0.8",
+    "expo": "~55.0.9",
     "expo-status-bar": "~55.0.4",
     "react": "19.2.0",
     "react-native": "0.83.2"
@@ -18,5 +18,14 @@
     "@types/react": "~19.2.2",
     "typescript": "~5.9.2"
   },
-  "private": true
+  "private": true,
+  "pnpm": {
+    "overrides": {
+      "node-forge": ">=1.4.0",
+      "picomatch": ">=4.0.4",
+      "yaml": ">=2.8.3",
+      "minimatch>brace-expansion": "5.0.5",
+      "@react-native/dev-middleware>brace-expansion": "1.1.13"
+    }
+  }
 }

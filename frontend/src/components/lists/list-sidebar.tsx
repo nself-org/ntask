@@ -67,12 +67,13 @@ export function ListSidebar({ activeListId, mobileOpen, onMobileClose }: ListSid
             type="button"
             onClick={() => setShowCreateDialog(true)}
             title="New list"
+            aria-label="Create new list"
           >
             <Plus className="h-4 w-4" />
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" variant="ghost" type="button" title="More options">
+              <Button size="sm" variant="ghost" type="button" title="More options" aria-label="More list options">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

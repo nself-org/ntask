@@ -253,6 +253,7 @@ export function TodoItemEnhanced({
                 onClick={handleSave}
                 disabled={isLoading || !editTitle.trim()}
                 className="h-8 w-8"
+                aria-label="Save task title"
               >
                 <Check className="h-4 w-4" />
               </Button>
@@ -262,6 +263,7 @@ export function TodoItemEnhanced({
                 onClick={handleCancel}
                 disabled={isLoading}
                 className="h-8 w-8"
+                aria-label="Cancel editing"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -274,6 +276,7 @@ export function TodoItemEnhanced({
                 onClick={() => setShareOpen(true)}
                 disabled={isLoading}
                 title="Share"
+                aria-label={`Share task: ${todo.title}`}
                 className="h-8 w-8"
               >
                 <Share2 className="h-4 w-4" />
@@ -284,6 +287,7 @@ export function TodoItemEnhanced({
                 onClick={() => setIsEditing(true)}
                 disabled={isLoading}
                 title="Edit"
+                aria-label={`Edit task: ${todo.title}`}
                 className="h-8 w-8"
               >
                 <Edit2 className="h-4 w-4" />
@@ -294,6 +298,7 @@ export function TodoItemEnhanced({
                 onClick={handleDelete}
                 disabled={isLoading}
                 title="Delete"
+                aria-label={`Delete task: ${todo.title}`}
                 className="h-8 w-8 text-destructive hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />

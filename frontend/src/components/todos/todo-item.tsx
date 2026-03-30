@@ -281,6 +281,7 @@ export function TodoItem({
               <button
                 type="button"
                 onClick={() => !selectionMode && onDetailOpen?.(todo)}
+                aria-label={`Open details for task: ${todo.title}`}
                 className={cn(
                   'text-sm font-medium text-left',
                   todo.completed && 'line-through text-muted-foreground',
@@ -378,6 +379,8 @@ export function TodoItem({
                 <button
                   type="button"
                   onClick={() => setNotesExpanded(!notesExpanded)}
+                  aria-label={notesExpanded ? 'Collapse notes' : 'Expand notes'}
+                  aria-expanded={notesExpanded}
                   className="flex items-center gap-1 hover:text-foreground transition-colors"
                 >
                   <FileText className="h-3 w-3" />
@@ -450,6 +453,7 @@ export function TodoItem({
                 onClick={() => setEditingTags(true)}
                 disabled={isLoading}
                 className="h-5 px-2 text-[10px] w-fit"
+                aria-label="Add tag to task"
               >
                 + Add Tag
               </Button>
@@ -490,6 +494,7 @@ export function TodoItem({
                         size="sm"
                         onClick={handleSaveNotes}
                         disabled={isLoading}
+                        aria-label="Save notes"
                       >
                         Save
                       </Button>
@@ -499,6 +504,7 @@ export function TodoItem({
                         variant="ghost"
                         onClick={handleCancelNotes}
                         disabled={isLoading}
+                        aria-label="Cancel editing notes"
                       >
                         Cancel
                       </Button>
@@ -517,6 +523,7 @@ export function TodoItem({
                       }}
                       disabled={isLoading}
                       className="h-7 px-2 text-xs"
+                      aria-label="Edit note for this task"
                     >
                       <Edit2 className="h-3 w-3 mr-1" />
                       Edit Note
@@ -539,6 +546,7 @@ export function TodoItem({
                 }}
                 disabled={isLoading}
                 className="h-5 px-2 text-[10px] w-fit"
+                aria-label="Add note to task"
               >
                 + Add Note
               </Button>
@@ -588,6 +596,7 @@ export function TodoItem({
                 onClick={handleSave}
                 disabled={isLoading || !editTitle.trim()}
                 className="h-8 w-8"
+                aria-label="Save task title"
               >
                 <Check className="h-4 w-4" />
               </Button>
@@ -597,6 +606,7 @@ export function TodoItem({
                 onClick={handleCancel}
                 disabled={isLoading}
                 className="h-8 w-8"
+                aria-label="Cancel editing"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -612,6 +622,7 @@ export function TodoItem({
                     onClick={handleApprove}
                     disabled={isLoading || approving}
                     title="Approve"
+                    aria-label="Approve task"
                     className="h-8 w-8 text-green-600 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
                   >
                     <CheckCircle2 className="h-4 w-4" />
@@ -622,6 +633,7 @@ export function TodoItem({
                     onClick={() => setRejectDialogOpen(true)}
                     disabled={isLoading || rejecting}
                     title="Reject"
+                    aria-label="Reject task"
                     className="h-8 w-8 text-red-600 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
                   >
                     <XCircle className="h-4 w-4" />
@@ -635,6 +647,7 @@ export function TodoItem({
                 onClick={() => setShareOpen(true)}
                 disabled={isLoading}
                 title="Share"
+                aria-label={`Share task: ${todo.title}`}
                 className="h-8 w-8"
               >
                 <Share2 className="h-4 w-4" />
@@ -648,6 +661,7 @@ export function TodoItem({
                 }}
                 disabled={isLoading}
                 title="Edit"
+                aria-label={`Edit task: ${todo.title}`}
                 className="h-8 w-8"
               >
                 <Edit2 className="h-4 w-4" />
@@ -658,6 +672,7 @@ export function TodoItem({
                 onClick={handleDelete}
                 disabled={isLoading}
                 title="Delete"
+                aria-label={`Delete task: ${todo.title}`}
                 className="h-8 w-8 text-destructive hover:text-destructive"
               >
                 <Trash2 className="h-4 w-4" />

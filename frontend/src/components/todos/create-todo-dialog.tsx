@@ -272,8 +272,9 @@ export function CreateTodoDialog({ open, onOpenChange, listId, onCreate }: Creat
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleTagKeyDown}
+                    aria-label="New tag name"
                   />
-                  <Button type="button" onClick={handleAddTag} size="sm">
+                  <Button type="button" onClick={handleAddTag} size="sm" aria-label="Add tag">
                     Add
                   </Button>
                 </div>

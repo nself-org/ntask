@@ -146,8 +146,9 @@ export function ShareTodoDialog({
               value={`${typeof window !== 'undefined' ? window.location.origin : ''}/todo/${todoId}`}
               readOnly
               className="text-xs"
+              aria-label="Shareable link for this todo"
             />
-            <Button variant="outline" size="icon" onClick={copyLink}>
+            <Button variant="outline" size="icon" onClick={copyLink} aria-label="Copy todo link to clipboard">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
@@ -163,6 +164,7 @@ export function ShareTodoDialog({
                 placeholder="email@example.com"
                 disabled={loading}
                 className="flex-1"
+                aria-label="Email address to share with"
               />
               <Select
                 value={permission}
@@ -176,7 +178,7 @@ export function ShareTodoDialog({
                   <SelectItem value="edit">Edit</SelectItem>
                 </SelectContent>
               </Select>
-              <Button type="submit" size="icon" disabled={loading || !email.trim()}>
+              <Button type="submit" size="icon" disabled={loading || !email.trim()} aria-label="Send share invitation">
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
@@ -210,6 +212,7 @@ export function ShareTodoDialog({
                     size="icon"
                     className="h-8 w-8 shrink-0"
                     onClick={() => handleRemoveShare(share.id)}
+                    aria-label={`Remove share access for ${share.shared_with_email}`}
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>

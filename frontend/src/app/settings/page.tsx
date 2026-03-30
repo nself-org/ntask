@@ -170,7 +170,7 @@ export default function SettingsPage() {
           {/* Auto-hide Completed */}
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>
+              <Label htmlFor="auto-hide-switch">
                 <Eye className="inline h-4 w-4 mr-1" />
                 Auto-hide Completed Todos
               </Label>
@@ -178,7 +178,7 @@ export default function SettingsPage() {
                 Automatically hide completed tasks from view
               </p>
             </div>
-            <Switch checked={autoHide} onCheckedChange={setAutoHide} />
+            <Switch id="auto-hide-switch" checked={autoHide} onCheckedChange={setAutoHide} aria-label="Automatically hide completed todos" />
           </div>
 
           <Separator />
@@ -254,7 +254,7 @@ export default function SettingsPage() {
               </p>
             </div>
             {Notification?.permission === 'granted' ? (
-              <Switch checked={pushEnabled} onCheckedChange={setPushEnabled} />
+              <Switch checked={pushEnabled} onCheckedChange={setPushEnabled} aria-label="Enable push notifications" />
             ) : (
               <Button onClick={handleEnablePushNotifications} size="sm">
                 Enable
@@ -272,7 +272,7 @@ export default function SettingsPage() {
                 Receive notifications via email
               </p>
             </div>
-            <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} />
+            <Switch checked={emailEnabled} onCheckedChange={setEmailEnabled} aria-label="Enable email notifications" />
           </div>
 
           <Separator />
@@ -283,33 +283,33 @@ export default function SettingsPage() {
 
             <div className="space-y-3 pl-4">
               <div className="flex items-center justify-between">
-                <Label className="font-normal">New todos added to shared lists</Label>
-                <Switch checked={newTodoNotif} onCheckedChange={setNewTodoNotif} />
+                <Label className="font-normal" htmlFor="notif-new-todo">New todos added to shared lists</Label>
+                <Switch id="notif-new-todo" checked={newTodoNotif} onCheckedChange={setNewTodoNotif} aria-label="Notify when new todos added to shared lists" />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label className="font-normal">Upcoming due dates</Label>
-                <Switch checked={dueReminders} onCheckedChange={setDueReminders} />
+                <Label className="font-normal" htmlFor="notif-due-reminders">Upcoming due dates</Label>
+                <Switch id="notif-due-reminders" checked={dueReminders} onCheckedChange={setDueReminders} aria-label="Notify about upcoming due dates" />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label className="font-normal">Lists shared with me</Label>
-                <Switch checked={sharedLists} onCheckedChange={setSharedLists} />
+                <Label className="font-normal" htmlFor="notif-shared-lists">Lists shared with me</Label>
+                <Switch id="notif-shared-lists" checked={sharedLists} onCheckedChange={setSharedLists} aria-label="Notify when lists are shared with me" />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label className="font-normal">Evening planning reminder</Label>
-                <Switch checked={eveningReminder} onCheckedChange={setEveningReminder} />
+                <Label className="font-normal" htmlFor="notif-evening">Evening planning reminder</Label>
+                <Switch id="notif-evening" checked={eveningReminder} onCheckedChange={setEveningReminder} aria-label="Send evening planning reminder" />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label className="font-normal">Location-based reminders</Label>
-                <Switch checked={locationReminders} onCheckedChange={setLocationReminders} />
+                <Label className="font-normal" htmlFor="notif-location">Location-based reminders</Label>
+                <Switch id="notif-location" checked={locationReminders} onCheckedChange={setLocationReminders} aria-label="Enable location-based reminders" />
               </div>
 
               <div className="flex items-center justify-between">
-                <Label className="font-normal">Updates to shared lists</Label>
-                <Switch checked={listUpdates} onCheckedChange={setListUpdates} />
+                <Label className="font-normal" htmlFor="notif-list-updates">Updates to shared lists</Label>
+                <Switch id="notif-list-updates" checked={listUpdates} onCheckedChange={setListUpdates} aria-label="Notify about updates to shared lists" />
               </div>
             </div>
           </div>
@@ -329,6 +329,7 @@ export default function SettingsPage() {
               value={eveningReminderTime}
               onChange={(e) => setEveningReminderTime(e.target.value)}
               className="w-32"
+              aria-label="Evening reminder time"
             />
           </div>
 

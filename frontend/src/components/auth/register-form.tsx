@@ -126,6 +126,7 @@ export function RegisterForm({ onSuccess, onLoginClick }: RegisterFormProps) {
             type="submit"
             disabled={loading}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="Create your account"
           >
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             Create account
@@ -152,7 +153,7 @@ export function RegisterForm({ onSuccess, onLoginClick }: RegisterFormProps) {
       {onLoginClick && (
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{' '}
-          <button onClick={onLoginClick} className="font-medium text-foreground underline-offset-4 hover:underline">
+          <button onClick={onLoginClick} className="font-medium text-foreground underline-offset-4 hover:underline" aria-label="Go to sign in page">
             Sign in
           </button>
         </p>

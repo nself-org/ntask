@@ -56,12 +56,13 @@ export function NotificationCenter() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button variant="ghost" size="icon" className="relative" aria-label={unreadCount > 0 ? `Notifications (${unreadCount} unread)` : 'Notifications'}>
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px]"
+              aria-hidden="true"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>
@@ -143,6 +144,7 @@ export function NotificationCenter() {
                               className="h-6 w-6"
                               onClick={(e) => handleMarkAsRead(notification.id, e)}
                               title="Mark as read"
+                              aria-label="Mark notification as read"
                             >
                               <Check className="h-3 w-3" />
                             </Button>
@@ -153,6 +155,7 @@ export function NotificationCenter() {
                             className="h-6 w-6 text-destructive"
                             onClick={(e) => handleDelete(notification.id, e)}
                             title="Delete"
+                            aria-label="Delete notification"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>

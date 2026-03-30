@@ -93,6 +93,7 @@ export function TodoToolbar({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-8 pr-8"
+            aria-label="Search todos"
           />
           {search && (
             <Button
@@ -100,6 +101,7 @@ export function TodoToolbar({
               size="sm"
               className="absolute right-0 top-1/2 h-full -translate-y-1/2 px-2"
               onClick={() => onSearchChange('')}
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -243,6 +245,8 @@ export function TodoToolbar({
               onClick={() => onViewChange('list')}
               className="h-7 px-2"
               title="List view"
+              aria-label="Switch to list view"
+              aria-pressed={view === 'list'}
               type="button"
             >
               <ListIcon className="h-4 w-4" />
@@ -253,6 +257,8 @@ export function TodoToolbar({
               onClick={() => onViewChange('board')}
               className="h-7 px-2"
               title="Board view"
+              aria-label="Switch to board view"
+              aria-pressed={view === 'board'}
               type="button"
             >
               <LayoutGrid className="h-4 w-4" />
@@ -263,6 +269,8 @@ export function TodoToolbar({
               onClick={() => onViewChange('calendar')}
               className="h-7 px-2"
               title="Calendar view"
+              aria-label="Switch to calendar view"
+              aria-pressed={view === 'calendar'}
               type="button"
             >
               <Calendar className="h-4 w-4" />
@@ -280,6 +288,7 @@ export function TodoToolbar({
               <button
                 onClick={() => handleCompletedToggle(undefined)}
                 className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${filters.completed ? 'completed' : 'active'} status filter`}
               >
                 <X className="h-3 w-3" />
               </button>
@@ -291,6 +300,7 @@ export function TodoToolbar({
               <button
                 onClick={() => onFiltersChange({ ...filters, priority: undefined })}
                 className="ml-1 hover:text-destructive"
+                aria-label={`Remove ${filters.priority} priority filter`}
               >
                 <X className="h-3 w-3" />
               </button>

@@ -182,6 +182,7 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
             onKeyDown={(e) => e.key === 'Enter' && handleTitleBlur()}
             className="border-0 px-0 text-lg font-semibold shadow-none focus-visible:ring-0"
             placeholder="Task title"
+            aria-label="Task title"
           />
         </div>
 
@@ -199,6 +200,7 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
                 value={dueDate}
                 onChange={(e) => handleDueDateChange(e.target.value)}
                 className="w-full rounded-md border border-input bg-background px-3 py-1.5 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label="Due date"
               />
             </div>
           </div>
@@ -268,6 +270,7 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
                     <button
                       onClick={() => handleRemoveTag(tag)}
                       className="ml-0.5 rounded-sm opacity-60 hover:opacity-100"
+                      aria-label={`Remove tag: ${tag}`}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -285,9 +288,10 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
                     }}
                     placeholder="Add tag..."
                     className="h-6 w-24 border-0 px-1 text-xs shadow-none focus-visible:ring-1"
+                    aria-label="New tag name"
                   />
                   {tagInput && (
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleAddTag}>
+                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleAddTag} aria-label="Confirm add tag">
                       <Check className="h-3 w-3" />
                     </Button>
                   )}
@@ -308,6 +312,7 @@ export function TaskDetailDrawer({ todo, open, onOpenChange, onUpdate }: TaskDet
             onBlur={handleNotesBlur}
             placeholder="Add notes..."
             className="min-h-[160px] resize-none border-0 px-0 shadow-none focus-visible:ring-0"
+            aria-label="Task notes"
           />
         </div>
 

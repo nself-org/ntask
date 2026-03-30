@@ -107,6 +107,8 @@ export function CreateListDialog({ open, onOpenChange }: CreateListDialogProps) 
                     type="button"
                     onClick={() => setSelectedColor(color)}
                     className="h-8 w-8 rounded-md border-2 transition-all hover:scale-110"
+                    aria-label={`Select color ${color}`}
+                    aria-pressed={selectedColor === color}
                     style={{
                       backgroundColor: color,
                       borderColor:

@@ -102,6 +102,7 @@ export function AppHeader() {
               onClick={() => setPaletteOpen(true)}
               className="sm:hidden"
               title="Search"
+              aria-label="Open search"
             >
               <Search className="h-4 w-4" />
             </Button>
@@ -124,6 +125,9 @@ export function AppHeader() {
                   type="button"
                   onClick={() => setMenuOpen(!menuOpen)}
                   className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition-colors hover:bg-muted"
+                  aria-label="Open user menu"
+                  aria-expanded={menuOpen}
+                  aria-haspopup="true"
                 >
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <User className="h-3.5 w-3.5" />
@@ -177,6 +181,7 @@ export function AppHeader() {
                       <button
                         onClick={handleSignOut}
                         className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-sm text-destructive transition-colors hover:bg-destructive/10"
+                        aria-label="Sign out of your account"
                       >
                         <LogOut className="h-4 w-4" />
                         Sign out

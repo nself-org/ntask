@@ -119,10 +119,11 @@ export function TodoCalendarView({ listId, search = '', filters }: TodoCalendarV
           size="sm"
           type="button"
           onClick={() => setCurrentMonth((m) => subMonths(m, 1))}
+          aria-label="Go to previous month"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <span className="min-w-[140px] text-center font-medium">
+        <span className="min-w-[140px] text-center font-medium" aria-live="polite" aria-atomic="true">
           {format(currentMonth, 'MMMM yyyy')}
         </span>
         <Button
@@ -130,6 +131,7 @@ export function TodoCalendarView({ listId, search = '', filters }: TodoCalendarV
           size="sm"
           type="button"
           onClick={() => setCurrentMonth((m) => addMonths(m, 1))}
+          aria-label="Go to next month"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -138,6 +140,7 @@ export function TodoCalendarView({ listId, search = '', filters }: TodoCalendarV
           size="sm"
           type="button"
           onClick={() => setCurrentMonth(new Date())}
+          aria-label="Go to current month"
         >
           Today
         </Button>
@@ -194,6 +197,7 @@ export function TodoCalendarView({ listId, search = '', filters }: TodoCalendarV
                         key={todo.id}
                         type="button"
                         onClick={() => handleOpenDrawer(todo)}
+                        aria-label={`Open task details: ${todo.title}`}
                         className={cn(
                           'w-full truncate rounded px-1 py-0.5 text-left text-xs transition-colors hover:opacity-80',
                           todo.completed

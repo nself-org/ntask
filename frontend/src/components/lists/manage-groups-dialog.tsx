@@ -97,6 +97,8 @@ export function ManageGroupsDialog({ open, onOpenChange }: ManageGroupsDialogPro
                   type="button"
                   onClick={() => setNewColor(color)}
                   className="h-5 w-5 rounded-full border-2 transition-transform hover:scale-110"
+                  aria-label={`Select color ${color}`}
+                  aria-pressed={newColor === color}
                   style={{
                     backgroundColor: color,
                     borderColor: newColor === color ? 'white' : 'transparent',
@@ -140,6 +142,7 @@ export function ManageGroupsDialog({ open, onOpenChange }: ManageGroupsDialogPro
                           type="button"
                           className="h-7 w-7 p-0"
                           onClick={() => saveEdit(group.id)}
+                          aria-label={`Save group name for ${group.title}`}
                         >
                           <Check className="h-3.5 w-3.5 text-green-500" />
                         </Button>
@@ -149,6 +152,7 @@ export function ManageGroupsDialog({ open, onOpenChange }: ManageGroupsDialogPro
                           type="button"
                           className="h-7 w-7 p-0"
                           onClick={cancelEdit}
+                          aria-label="Cancel editing group"
                         >
                           <X className="h-3.5 w-3.5" />
                         </Button>
@@ -162,6 +166,7 @@ export function ManageGroupsDialog({ open, onOpenChange }: ManageGroupsDialogPro
                           type="button"
                           className="h-7 w-7 p-0"
                           onClick={() => startEdit(group)}
+                          aria-label={`Edit group: ${group.title}`}
                         >
                           <Edit2 className="h-3.5 w-3.5 text-muted-foreground" />
                         </Button>
@@ -171,6 +176,7 @@ export function ManageGroupsDialog({ open, onOpenChange }: ManageGroupsDialogPro
                           type="button"
                           className="h-7 w-7 p-0"
                           onClick={() => handleDelete(group.id)}
+                          aria-label={`Delete group: ${group.title}`}
                         >
                           <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
                         </Button>

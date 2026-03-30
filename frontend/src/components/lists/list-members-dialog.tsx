@@ -291,6 +291,7 @@ export function ListMembersDialog({
                             size="icon"
                             onClick={() => handleRemove(member.id)}
                             className="h-8 w-8 text-destructive hover:text-destructive"
+                            aria-label={`Remove ${member.user?.display_name || member.user?.email || 'member'} from list`}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

@@ -98,8 +98,9 @@ export function ShareListDialog({ list, open, onOpenChange }: ShareListDialogPro
               readOnly
               value={`${typeof window !== 'undefined' ? window.location.origin : ''}/lists/${list.id}`}
               className="flex-1"
+              aria-label="Shareable link for this list"
             />
-            <Button variant="outline" onClick={handleCopyLink}>
+            <Button variant="outline" onClick={handleCopyLink} aria-label="Copy list link to clipboard">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
@@ -116,6 +117,7 @@ export function ShareListDialog({ list, open, onOpenChange }: ShareListDialogPro
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1"
+                aria-label="Email address to invite"
               />
               <Select
                 value={permission}
@@ -208,6 +210,7 @@ export function ShareListDialog({ list, open, onOpenChange }: ShareListDialogPro
                             variant="ghost"
                             size="sm"
                             onClick={() => handleRemoveShare(share.id)}
+                            aria-label={`Remove access for ${share.user?.display_name || share.shared_with_email}`}
                           >
                             <UserX className="h-4 w-4 text-muted-foreground" />
                           </Button>

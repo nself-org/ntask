@@ -16,36 +16,25 @@ on:
 jobs:
   build-ios:
     name: Build + Upload iOS
-    runs-on: macos-latest
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: app
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: subosito/flutter-action@v2
         with:
-          version: 10
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          flutter-version: '3.29.x'
+          channel: 'stable'
+          cache: true
 
       - name: Install dependencies
-        working-directory: frontend
-        run: pnpm install --frozen-lockfile
+        run: flutter pub get
 
-      - name: Build Next.js
-        working-directory: frontend
-        env:
-          NEXT_PUBLIC_BACKEND_PROVIDER: nself
-          CAPACITOR_BUILD: 'true'
-        run: pnpm build
-
-      - name: Capacitor sync iOS
-        working-directory: frontend
-        run: pnpm exec cap sync ios
+      - name: Generate l10n
+        run: flutter gen-l10n
 
       - name: Setup code signing
         env:
@@ -66,21 +55,20 @@ jobs:
           cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
 
       - name: Build iOS archive
-        working-directory: frontend/ios/App
         run: |
           xcodebuild \
-            -workspace App.xcworkspace \
-            -scheme App \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
             -configuration Release \
             -archivePath ${{ runner.temp }}/ntasks.xcarchive \
             archive \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="ɳTask AppStore"
+            PROVISIONING_PROFILE_SPECIFIER="ɳTask AppStore" \
+            DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}"
 
       - name: Export IPA
-        working-directory: ${{ runner.temp }}
         run: |
-          cat > ExportOptions.plist << 'PLIST'
+          cat > ${{ runner.temp }}/ExportOptions.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
           <plist version="1.0">
@@ -88,21 +76,20 @@ jobs:
             <key>method</key>
             <string>app-store</string>
             <key>teamID</key>
-            <string>TEAM_ID_PLACEHOLDER</string>
+            <string>${{ secrets.APPLE_TEAM_ID }}</string>
           </dict>
           </plist>
-          PLIST
-          sed -i '' "s/TEAM_ID_PLACEHOLDER/${{ secrets.APPLE_TEAM_ID }}/" ExportOptions.plist
+          EOF
           xcodebuild \
             -exportArchive \
-            -archivePath ntasks.xcarchive \
-            -exportPath ipa/ \
-            -exportOptionsPlist ExportOptions.plist
+            -archivePath ${{ runner.temp }}/ntasks.xcarchive \
+            -exportPath ${{ runner.temp }}/ipa/ \
+            -exportOptionsPlist ${{ runner.temp }}/ExportOptions.plist
 
       - name: Upload to TestFlight
         uses: apple-actions/upload-testflight-build@v1
         with:
-          app-path: ${{ runner.temp }}/ipa/App.ipa
+          app-path: ${{ runner.temp }}/ipa/Runner.ipa
           issuer-id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           api-key-id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
           api-private-key: ${{ secrets.APP_STORE_CONNECT_API_KEY }}

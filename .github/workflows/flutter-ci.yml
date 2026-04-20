@@ -116,7 +116,7 @@ jobs:
       - name: Build Linux release
         run: flutter build linux --release
       - name: Upload Linux artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: linux-release
           path: app/build/linux/x64/release/bundle/
@@ -146,7 +146,7 @@ jobs:
         run: flutter build windows --release
         working-directory: app
       - name: Upload Windows artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-release
           path: app/build/windows/x64/runner/Release/

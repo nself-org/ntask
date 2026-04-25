@@ -121,3 +121,12 @@ When making changes to the project:
 ---
 
 **Note:** This changelog is maintained manually. Contributors are expected to update it as part of their pull requests.
+
+## v1.0.12 (P96 — 2026-04-25)
+
+### Added
+- Flutter ship-ready: l10n ARB files generated for all supported locales.
+- Brand assets updated to v1.0.12 icon set across all platforms.
+
+### Changed
+- Minimum nSelf CLI version requirement bumped to v1.0.12 in backend README.

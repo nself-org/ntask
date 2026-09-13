@@ -87,6 +87,12 @@ jobs:
       # Vercel runs `pnpm build`, which is vite build alone — typechecking the
       # app there would need the sibling packages' own devDependencies, which
       # are not in this repo's lockfile. So it is gated here instead.
+      # web/package.json has had a `lint` script since the app moved here, but
+      # nothing ever ran it, so eslint was never a gate. Blocking, no
+      # continue-on-error: a lint error fails the job like any other check.
+      - name: Lint
+        run: pnpm --filter ntask lint
+
       - name: Typecheck
         working-directory: web
         run: pnpm typecheck

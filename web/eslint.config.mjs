@@ -33,6 +33,17 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["node_modules/", "dist/", ".next/", ".turbo/", "coverage/"],
+    // .vercel/ holds `vercel build` output — minified bundles that lint as
+    // thousands of no-unused-expressions errors. It belongs with dist/ here;
+    // its absence is why `eslint .` could never pass and the lint script was
+    // never wired into CI.
+    ignores: [
+      "node_modules/",
+      "dist/",
+      ".next/",
+      ".turbo/",
+      ".vercel/",
+      "coverage/",
+    ],
   },
 );

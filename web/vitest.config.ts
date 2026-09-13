@@ -51,16 +51,15 @@ export default defineConfig({
     // (vitest.shard.config.ts) and merges their istanbul coverage. This base
     // config still drives `pnpm test` / `test:watch` and is inherited by the
     // shard config. maxForks:1 keeps a single non-sharded run bounded too.
+    // Vitest 4 removed `poolOptions` — the per-pool settings are top-level
+    // options now (see the pool-rework migration note). Same behaviour, same
+    // single bounded fork; only the nesting changed.
     pool: 'forks',
-    poolOptions: {
-      forks: {
-        maxForks: 1,
-        minForks: 1,
-        // 2GB per worker is ample now the suite peaks ~500MB; the 3.7GB runner
-        // never needs more, and a high ceiling just masked the real leak above.
-        execArgv: ['--max-old-space-size=2048'],
-      },
-    },
+    maxForks: 1,
+    minForks: 1,
+    // 2GB per worker is ample now the suite peaks ~500MB; the 3.7GB runner
+    // never needs more, and a high ceiling just masked the real leak above.
+    execArgv: ['--max-old-space-size=2048'],
     coverage: {
       provider: 'istanbul',
       reporter: ['text', 'lcov'],

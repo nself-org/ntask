@@ -50,7 +50,7 @@ The ɳTasks backend is a self-contained Docker Compose stack. It runs PostgreSQL
 | graphql-engine | `hasura/graphql-engine` | 8080 | GraphQL API + console |
 | auth | `nhost/hasura-auth` | 4000 | JWT signup, signin, password reset |
 | storage | `nhost/hasura-storage` | 8484 | S3-compatible upload, download, signed URLs |
-| minio | `minio/minio` | 9000, 9001 | Object storage backend + admin UI |
+| minio | `quay.io/minio/minio` | 9000, 9001 | Object storage backend + admin UI |
 | mailpit | `axllent/mailpit` | 8025 | Dev email capture (UI on 8025, SMTP on 1025) |
 | traefik | `traefik` | 80, 443 | HTTPS reverse proxy (staging/prod profiles) |
 

@@ -32,7 +32,7 @@ This directory contains everything needed to run a complete backend for your app
 | Hasura GraphQL Engine | `hasura/graphql-engine:v2.42.0` | 8080 | GraphQL API + Console |
 | Hasura Auth | `nhost/hasura-auth:0.32.1` | 4000 | Authentication (email, OAuth) |
 | Hasura Storage | `nhost/hasura-storage:0.6.1` | 8484 | S3-compatible file storage |
-| MinIO | `minio/minio` | 9000/9001 | Object storage (S3-compatible) |
+| MinIO | `quay.io/minio/minio` | 9000/9001 | Object storage (S3-compatible) |
 | Mailhog | `mailhog/mailhog` | 1025/8025 | Local email testing (dev only) |
 | Traefik | `traefik:v3.0` | 80/443 | Reverse proxy + HTTPS (staging/prod) |
 

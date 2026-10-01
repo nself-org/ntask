@@ -14,8 +14,8 @@
 
 [[IgnoredVulns]]
 id = "GHSA-5p2g-fcmc-qvqq"
-reason = "image-size@1.2.1 — no fixed version published upstream as of 2026-08-15. Transitive build-time dependency of the Expo/Metro asset pipeline; it is not declared by any workspace package and is not included in the shipped app bundle, so it is not reachable at runtime. Re-check when image-size publishes a fix."
+reason = "image-size@1.2.1 (pulled only by metro@0.82.5 via expo ~53, Assets.js). Fixed in image-size 2.0.3, but forcing it with a root override was tested 2026-10-01 and breaks metro: image-size 2.x no longer exports a callable (require() returns an object), so metro getAssetData throws 'getImageSize is not a function' for every image asset. Build-time only, not in the runtime bundle. Review when expo/metro moves to a release that supports image-size 2.x (or on 2026-11-01)."
 
 [[IgnoredVulns]]
 id = "GHSA-w3rx-r6r6-pgpr"
-reason = "image-size@1.2.1 — same advisory pair as GHSA-5p2g-fcmc-qvqq: no upstream fix, build-time only, not in the runtime bundle. Re-check when image-size publishes a fix."
+reason = "Same advisory pair as GHSA-5p2g-fcmc-qvqq: image-size 2.0.3 fixes it but breaks metro@0.82.5 (see above); build-time only. Review 2026-11-01."

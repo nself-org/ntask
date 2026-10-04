@@ -46,9 +46,8 @@ erased during bundling.
 | `NODE_ENV` | `production` sets the `Secure` cookie flag | `production` |
 | `PORT` | listen port | `3080` (default) |
 
-Provide these via an **env-file**, never literal `-e` flags. See
-`bff/deploy-staging.sh` for the reference staging deploy (build on the box from
-synced source + `docker compose up -d --no-deps api`).
+Provide these via an **env-file**, never literal `-e` flags. Deploys go through
+the `nself` CLI.
 
 > **Production hardening (follow-up):** the durable path is CI building this image
 > and publishing to GHCR, with the compose referencing an immutable tag instead of

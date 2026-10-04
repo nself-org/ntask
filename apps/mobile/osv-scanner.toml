@@ -19,3 +19,11 @@ reason = "image-size@1.2.1 (pulled only by metro@0.82.5 via expo ~53, Assets.js)
 [[IgnoredVulns]]
 id = "GHSA-w3rx-r6r6-pgpr"
 reason = "Same advisory pair as GHSA-5p2g-fcmc-qvqq: image-size 2.0.3 fixes it but breaks metro@0.82.5 (see above); build-time only. Review 2026-11-01."
+
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+reason = "braces <= 3.0.3 stack-exhaustion DoS on deeply nested patterns. No patched release exists (advisory first_patched_version is null, checked 2026-10-04). braces@3.0.3 is pulled only through micromatch by dev and build tooling (jest, graphql-codegen, metro), which only expands patterns from repo config, never user input. Remove and add a root override as soon as a fixed braces ships. Review 2026-11-01."
+
+[[IgnoredVulns]]
+id = "GHSA-86w9-cpqp-85rv"
+reason = "node-forge <= 1.4.0 RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements. No patched release exists (first_patched_version null, checked 2026-10-04). node-forge@1.4.0 is pulled only by @expo/cli (dev server certificates); no ntask runtime code verifies signatures with it. Remove and add a root override as soon as a fixed node-forge ships. Review 2026-11-01."

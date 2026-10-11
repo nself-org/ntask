@@ -45,7 +45,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
           # Root lockfile is canonical for workspace (apps/mobile is a workspace package)
           cache-dependency-path: pnpm-lock.yaml

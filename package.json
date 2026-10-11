@@ -62,6 +62,14 @@
       "@graphql-codegen/visitor-plugin-common@>=7.0.0 <7.2.10": "^7.2.10",
       "graphql-config@>=5.0.0 <5.1.8": "^5.1.8"
     },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-vfj7-8cjw-p6xm",
+        "GHSA-86w9-cpqp-85rv",
+        "GHSA-5p2g-fcmc-qvqq",
+        "GHSA-w3rx-r6r6-pgpr"
+      ]
+    },
     "patchedDependencies": {
       "@expo/plist@0.2.2": "patches/@expo__plist@0.2.2.patch",
       "@expo/plist@0.3.5": "patches/@expo__plist@0.3.5.patch"

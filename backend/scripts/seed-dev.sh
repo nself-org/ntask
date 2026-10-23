@@ -15,10 +15,10 @@ cd "$(dirname "$0")/.."
 
 BASE_DOMAIN="$(grep -h '^BASE_DOMAIN=' .env.dev .env 2>/dev/null | tail -1 | cut -d= -f2- || echo "")"
 case "$BASE_DOMAIN" in
-  *local.nself.org*|*localhost*|*staging.nself.org*)
+  *local.nself.org*|*localhost*)
     : ;;
   *)
-    echo "REFUSING: BASE_DOMAIN='$BASE_DOMAIN' is not local/staging — dev seed only." >&2
+    echo "REFUSING: BASE_DOMAIN='$BASE_DOMAIN' is not local — dev seed only (no staging server exists, ADR 0014)." >&2
     exit 1 ;;
 esac
 

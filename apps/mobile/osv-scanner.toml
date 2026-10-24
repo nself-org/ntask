@@ -27,3 +27,7 @@ reason = "braces <= 3.0.3 stack-exhaustion DoS on deeply nested patterns. No pat
 [[IgnoredVulns]]
 id = "GHSA-86w9-cpqp-85rv"
 reason = "node-forge <= 1.4.0 RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements. No patched release exists (first_patched_version null, checked 2026-10-04). node-forge@1.4.0 is pulled only by @expo/cli (dev server certificates); no ntask runtime code verifies signatures with it. Remove and add a root override as soon as a fixed node-forge ships. Review 2026-11-01."
+
+[[IgnoredVulns]]
+id = "GHSA-mrhx-c7xc-m3w5"
+reason = "zod 3.22.4 memory exhaustion on oversized constrained collections. Fixed only in zod 4.6.6; every zod we ship is 4.6.7 through the root override. The one 3.22.4 left is pinned exactly by @vercel/python-analysis (via @vercel/build-utils, @vercel/node), a deploy-time build tool that validates its own fixed-size config, never user input; the latest release still pins it and that package is not known to support zod 4. Remove when @vercel/python-analysis moves to zod 4. Review 2026-11-15."

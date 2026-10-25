@@ -95,12 +95,6 @@
       "unlocks": "Cloud sync, premium models, team features"
     },
     {
-      "name": "ɳTV",
-      "annual": "$9.99/yr",
-      "price": "$0.99/mo",
-      "unlocks": "Media downloading, encoding, streaming, metadata, podcast hosting, multi-source media-network routing"
-    },
-    {
       "name": "ɳFamily",
       "annual": "$9.99/yr",
       "price": "$0.99/mo",
@@ -134,12 +128,6 @@
     },
     {
       "tier": "ɳSentry",
-      "monthly": "$0.99/mo",
-      "annual": "$9.99/yr",
-      "includes": "~16%"
-    },
-    {
-      "tier": "ɳTV",
       "monthly": "$0.99/mo",
       "annual": "$9.99/yr",
       "includes": "~16%"

@@ -22,10 +22,13 @@
 # All plugins listed here are free tier — no license key required.
 
 app: ntask
-display_name: "ɳTask"
-version: "1.1.4"
+cli_min_version: 1.4.15
 bundle: ntask          # free bundle, no license key required
-tier: free
+
+# Keys the nself CLI does not read are x- extension keys (contract:config.nself-yaml).
+x-display_name: "ɳTask"
+x-version: "1.1.4"
+x-tier: free
 
 # =============================================================================
 # AUTH MODE
@@ -51,7 +54,7 @@ tier: free
 # The compose profile/override pattern in docker-compose.*.yml implements it.
 # PCI filed: nself-auth-mode-toggle
 # =============================================================================
-auth_mode: bundled
+x-auth_mode: bundled
 
 plugins:
   free:
@@ -77,7 +80,7 @@ plugins:
     #   webhooks       — outbound webhook delivery: HTTP callbacks on events
     #   tokens         — API token management: scoped long-lived tokens
 
-services:
+x-services:
   postgres:
     version: "16"
     db: ntask

@@ -1,0 +1,5 @@
+# Pinned commit of nself-org/packages that every CI workflow checks out into packages/.
+# Bump this TOGETHER with pnpm-lock.yaml: the root lockfile covers the packages/ workspace
+# members, so a moving packages main makes the lockfile stale (ERR_PNPM_OUTDATED_LOCKFILE).
+# To bump: set the new sha, clone packages at it into ./packages, run 'pnpm install --lockfile-only'.
+12d7adc98b03c38c305942b8d8251a46115da670

@@ -56,7 +56,11 @@ jobs:
         working-directory: '.'
         run: |
           rm -rf packages
-          git clone --depth 1 https://github.com/nself-org/packages.git packages
+          # Pinned to .github/packages-ref (bump with pnpm-lock.yaml); never track packages main.
+          PKG_REF=$(grep -v "^#" .github/packages-ref | head -1)
+          git init -q packages
+          git -C packages fetch -q --depth 1 https://github.com/nself-org/packages.git "$PKG_REF"
+          git -C packages checkout -q FETCH_HEAD
 
       - uses: pnpm/action-setup@v6
 
@@ -137,7 +141,11 @@ jobs:
         working-directory: '.'
         run: |
           rm -rf packages
-          git clone --depth 1 https://github.com/nself-org/packages.git packages
+          # Pinned to .github/packages-ref (bump with pnpm-lock.yaml); never track packages main.
+          PKG_REF=$(grep -v "^#" .github/packages-ref | head -1)
+          git init -q packages
+          git -C packages fetch -q --depth 1 https://github.com/nself-org/packages.git "$PKG_REF"
+          git -C packages checkout -q FETCH_HEAD
 
       - uses: pnpm/action-setup@v6
         with:
@@ -216,7 +224,11 @@ jobs:
       - name: Checkout shared @nself packages (sibling workspace dir)
         run: |
           rm -rf packages
-          git clone --depth 1 https://github.com/nself-org/packages.git packages
+          # Pinned to .github/packages-ref (bump with pnpm-lock.yaml); never track packages main.
+          PKG_REF=$(grep -v "^#" .github/packages-ref | head -1)
+          git init -q packages
+          git -C packages fetch -q --depth 1 https://github.com/nself-org/packages.git "$PKG_REF"
+          git -C packages checkout -q FETCH_HEAD
       - uses: pnpm/action-setup@v6
         with:
           version: '10.30.1'

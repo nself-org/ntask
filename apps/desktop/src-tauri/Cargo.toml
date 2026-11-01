@@ -27,7 +27,7 @@ tauri = { version = "2", features = [
 # ── Tauri 2 plugins ───────────────────────────────────────────────────────────
 tauri-plugin-window-state    = "2"   # E-S2-T7 — persist window size/position
 tauri-plugin-autostart       = "2"   # E-S2-T1 — launch at login
-tauri-plugin-updater         = "2"   # E-S3-T5 — Ed25519 auto-update
+tauri-plugin-updater         = "2.14.1" # E-S3-T5 — Ed25519 auto-update
 tauri-plugin-global-shortcut = "2"   # E-S2-T5 — Cmd/Ctrl+Shift+N, T
 tauri-plugin-notification    = "2"   # E-S2-T4 — native OS notifications
 tauri-plugin-deep-link       = "2"   # E-S2-T2 — ntask:// URL scheme

@@ -37,7 +37,7 @@
     "@nself/tailwind-brand": "workspace:*",
     "@sentry/react": "^8",
     "@tailwindcss/postcss": "^4.2.1",
-    "@tauri-apps/api": "^2",
+    "@tauri-apps/api": "^2.12.4",
     "@vercel/og": "1.0.3",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",

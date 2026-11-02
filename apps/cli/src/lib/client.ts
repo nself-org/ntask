@@ -43,6 +43,27 @@ export interface LoginResult {
   readonly expiresIn: number;
 }
 
+/** User object hasura-auth returns inside a session. */
+interface AuthUser {
+  id?: string;
+  email?: string;
+}
+
+/** Session payload shared by the sign-in (nested under `session`) and token-refresh (top level) responses. */
+interface AuthSession {
+  accessToken?: string;
+  refreshToken?: string;
+  accessTokenExpiresIn?: number;
+  user?: AuthUser;
+}
+
+/** Response body of the hasura-auth endpoints; every field is optional because error bodies carry only message/error. */
+interface AuthBody extends AuthSession {
+  message?: string;
+  error?: string;
+  session?: AuthSession;
+}
+
 /** Sign in against hasura-auth's email/password endpoint. */
 export async function login(authUrl: string, email: string, password: string): Promise<LoginResult> {
   const res = await fetchWithTimeout(`${authUrl}/signin/email-password`, {
@@ -51,7 +72,7 @@ export async function login(authUrl: string, email: string, password: string): P
     body: JSON.stringify({ email, password }),
   });
 
-  const body = (await res.json().catch(() => ({}))) as Record<string, any>;
+  const body = (await res.json().catch(() => ({}))) as AuthBody;
 
   if (!res.ok) {
     const message = body?.message || body?.error || `Login failed (HTTP ${res.status})`;
@@ -65,7 +86,7 @@ export async function login(authUrl: string, email: string, password: string): P
 
   return {
     accessToken: session.accessToken,
-    refreshToken: session.refreshToken,
+    refreshToken: session.refreshToken ?? '',
     userId: session.user?.id ?? '',
     email: session.user?.email ?? email,
     expiresIn: session.accessTokenExpiresIn ?? 900,
@@ -79,7 +100,7 @@ export async function refreshAccessToken(authUrl: string, refreshToken: string):
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ refreshToken }),
   });
-  const body = (await res.json().catch(() => ({}))) as Record<string, any>;
+  const body = (await res.json().catch(() => ({}))) as AuthBody;
   if (!res.ok || !body?.accessToken) {
     throw new NTaskApiError(body?.message || `Token refresh failed (HTTP ${res.status})`, res.status);
   }

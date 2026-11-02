@@ -21,7 +21,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "ci:local": "pnpm typecheck && pnpm build && pnpm test"
@@ -31,8 +31,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "eslint": "^10.13.0",
     "tsx": "^4.19.0",
     "typescript": "^5.6.0",
+    "typescript-eslint": "^8",
     "vitest": "^4.1.11"
   },
   "engines": {

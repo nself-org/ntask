@@ -5,9 +5,7 @@
   "description": "ɳTask Desktop — Tauri 2 shell wrapping web/ntask Vite SPA",
   "scripts": {
     "dev": "tauri dev",
-    "build": "tauri build",
-    "tauri": "tauri",
-    "typecheck": "tsc --noEmit"
+    "tauri": "tauri"
   },
   "devDependencies": {
     "@tauri-apps/api": "^2.12.4",

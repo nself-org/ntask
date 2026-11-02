@@ -1,7 +1,8 @@
-# Supabase ANON keys are designed to be public in client code (RLS-protected).
-# These are default fallback values, never used in production.
+# Reviewed 2026-11-02: Supabase anon-role JWT (decoded role=anon, public client key by design) hardcoded as an env fallback in the v0.1.0 boilerplate; file removed from the tree, present only in history
 lib/supabase.ts:jwt:4
+
+# Reviewed 2026-11-02: same Supabase anon-role JWT (role=anon, public client key by design) as a fallback in the v0.1.0 boilerplate client; file removed from the tree, present only in history
 lib/backend/supabase/client.ts:jwt:8
 
-# README.md curl example — fake/illustrative Bearer token, not a real secret
+# Reviewed 2026-11-02: curl example in the backend README used the YOUR_JWT_TOKEN placeholder, not a credential; the README no longer has this line at 448
 backend/README.md:curl-auth-header:448

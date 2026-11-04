@@ -41,6 +41,7 @@ const config = {
       '|@urql(?:/[^/]+)?' +
       '|wonka' +
       '|@nself(?:/[^/]+)?' +
+      '|decode-uri-component' +
       ')' +
       ')',
   ],

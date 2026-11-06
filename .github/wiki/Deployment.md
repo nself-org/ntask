@@ -42,7 +42,7 @@ For the hosted `task.nself.org` demo, the same stack runs via `web/backend` (see
 
 ## Web SaaS (React + Vite → Vercel, separate repo)
 
-The web SaaS is built and deployed from `web/` in this repo. Auto-deployed: merges to `main` trigger a Vercel deployment (Vercel git integration, `unity-dev` team).
+The web SaaS is built and deployed from `web/` in this repo, through the Vercel git integration (`unity-dev` team). A push never deploys on its own: `web/vercel.json` `ignoreCommand` skips every build, preview and production, unless the commit message contains `[vercel-release]` (D-1552). A commit with that marker is made only for a release the owner approved.
 
 ```bash
 cd web
@@ -54,7 +54,7 @@ Preview deploy (before merging):
 vercel deploy --token $VERCEL_TOKEN
 ```
 
-Production: automatic on merge to `main` via Vercel git integration.
+Production: merge the approved release commit, whose message contains `[vercel-release]`, to `main`. Any other merge creates no deployment.
 
 ---
 

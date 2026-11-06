@@ -1,5 +1,5 @@
 {
-  "ignoreCommand": "bash -c 'if [ \"$VERCEL_ENV\" = preview ]; then exit 0; fi; exit 1'",
+  "ignoreCommand": "bash -c 'case \"$VERCEL_GIT_COMMIT_MESSAGE\" in *\"[vercel-release]\"*) exit 1;; esac; exit 0'",
   "framework": "vite",
   "installCommand": "bash scripts/vercel-install.sh",
   "outputDirectory": "dist",
